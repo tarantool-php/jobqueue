@@ -11,7 +11,7 @@ class CallbackExecutor implements Executor
     private $callbackResolver;
     private $autowiredArgs;
 
-    public function __construct(CallbackResolver $callbackResolver, array $autowiredArgs = null)
+    public function __construct(CallbackResolver $callbackResolver, array $autowiredArgs = [])
     {
         $this->callbackResolver = $callbackResolver;
         $this->autowiredArgs = $autowiredArgs;
