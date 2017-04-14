@@ -3,6 +3,7 @@
     "description": "Tarantool Job Queue.",
     "keywords": ["queue", "schedule", "delayed", "priority", "ttl", "ttr", "task", "job", "worker", "tarantool", "nosql"],
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "Eugene Leonovich",
