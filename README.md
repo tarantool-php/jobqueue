@@ -21,3 +21,8 @@
 docker run --name jobqueue -p3301:3301 -v `pwd`:/jobqueue tarantool/tarantool:1.7 tarantool /jobqueue/tests/Integration/queues.lua
 vendor/bin/phpunit
 ```
+
+
+## License
+
+The library is released under the MIT License. See the bundled [LICENSE](LICENSE) file for details.
