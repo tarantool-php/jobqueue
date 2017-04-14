@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+
+// installed via composer?
+if (file_exists($file = __DIR__.'/../../autoload.php')) {
+    require $file;
+} else {
+    require __DIR__.'/vendor/autoload.php';
+}
+
+$app = new Tarantool\JobQueue\Console\Application();
+$app->run();

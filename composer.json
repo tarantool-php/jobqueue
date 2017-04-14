@@ -1,0 +1,50 @@
+{
+    "name": "tarantool/jobqueue",
+    "description": "Tarantool Job Queue.",
+    "keywords": ["queue", "schedule", "delayed", "priority", "ttl", "ttr", "task", "job", "worker", "tarantool", "nosql"],
+    "type": "library",
+    "authors": [
+        {
+            "name": "Eugene Leonovich",
+            "email": "gen.work@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "amphp/parallel": "^0.1.0@dev",
+        "monolog/monolog": "^1.22",
+        "psr/log": "^1.0",
+        "rybakit/msgpack": "^0.2.2",
+        "symfony/console": "^3.2",
+        "tarantool/client": "@dev",
+        "tarantool/queue": "@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.0",
+        "psr/container": "^1.0",
+        "rybakit/arguments-resolver": "^0.5.0",
+        "symfony/process": "^3.2",
+        "xtreamwayz/pimple-container-interop": "^1.0"
+    },
+    "suggest": {
+        "rybakit/arguments-resolver": "For using CallbackExecutor.",
+        "symfony/process": "For using ProcessExecutor."
+    },
+    "autoload": {
+        "psr-4": {
+            "Tarantool\\JobQueue\\": "src/"
+        }
+    },
+    "autoload-dev" : {
+        "psr-4": {
+            "Tarantool\\JobQueue\\Tests\\": "tests/"
+        }
+    },
+    "bin": [
+        "jobqueue"
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev"
+}
