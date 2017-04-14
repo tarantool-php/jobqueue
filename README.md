@@ -1,6 +1,6 @@
 # Tarantool JobQueue
 
-# Usage
+## Usage
 
 ```bash
 ./jobqueue
@@ -8,7 +8,7 @@
 ```
 
 
-## Running a worker
+### Running a worker
 
 ```bash
 ./jobqueue run <queue-name> -f worker.log -l debug -e executors.php
