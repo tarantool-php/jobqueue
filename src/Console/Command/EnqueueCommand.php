@@ -29,7 +29,7 @@ class EnqueueCommand extends Command
             throw new \InvalidArgumentException('Invalid json data.');
         }
 
-        $queue->put(json_decode($json, true));
+        $queue->put($data);
 
         $output->writeln(sprintf('<comment>%s</comment> was successfully enqueued to <info>%s</info>.', $json, $queue->getName()));
     }
