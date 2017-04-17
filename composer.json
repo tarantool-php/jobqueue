@@ -1,6 +1,6 @@
 {
     "name": "tarantool/jobqueue",
-    "description": "Tarantool Job Queue.",
+    "description": "A job queue backed by Tarantool.",
     "keywords": ["queue", "schedule", "delayed", "priority", "ttl", "ttr", "task", "job", "worker", "tarantool", "nosql"],
     "type": "library",
     "license": "MIT",
