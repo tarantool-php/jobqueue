@@ -13,7 +13,7 @@ class LimitedRetryStrategy implements RetryStrategy
         $this->retryLimit = $retryLimit;
     }
 
-    public function getDelay(int $attempt): ?int
+    public function getDelay(int $attempt)
     {
         return $attempt <= $this->retryLimit
             ? $this->retryStrategy->getDelay($attempt)

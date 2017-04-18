@@ -11,7 +11,7 @@ class ExponentialRetryStrategy implements RetryStrategy
         $this->base = $base;
     }
 
-    public function getDelay(int $attempt): ?int
+    public function getDelay(int $attempt)
     {
         return $this->base ** $attempt;
     }

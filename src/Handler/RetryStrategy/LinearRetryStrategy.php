@@ -11,7 +11,7 @@ class LinearRetryStrategy implements RetryStrategy
         $this->step = $step;
     }
 
-    public function getDelay(int $attempt): ?int
+    public function getDelay(int $attempt)
     {
         return $attempt * $this->step;
     }

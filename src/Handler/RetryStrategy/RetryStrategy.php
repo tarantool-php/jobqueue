@@ -4,5 +4,9 @@ namespace Tarantool\JobQueue\Handler\RetryStrategy;
 
 interface RetryStrategy
 {
-    public function getDelay(int $attempt): ?int;
+    /**
+     * @param int $attempt
+     * @return int|null
+     */
+    public function getDelay(int $attempt)/*: ?int*/;
 }
