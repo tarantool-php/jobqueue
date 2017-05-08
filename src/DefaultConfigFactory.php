@@ -62,10 +62,10 @@ class DefaultConfigFactory
 
     public function createFailureHandler(): Handler
     {
-        return new RecurrenceHandler(new RetryHandler(
+        return new RetryHandler(
             new BuryHandler(),
             $this->createRetryStrategyFactory()
-        ));
+        );
     }
 
     public function createRetryStrategyFactory(): RetryStrategyFactory
