@@ -1,8 +1,7 @@
 <?php
 
-namespace Tarantool\JobQueue\Executor;
+namespace Tarantool\JobQueue;
 
-use Tarantool\JobQueue\DefaultConfigFactory;
 use Tarantool\JobQueue\Handler\Handler;
 use Tarantool\Queue\Queue;
 use Tarantool\Queue\Task;
