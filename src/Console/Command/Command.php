@@ -15,7 +15,7 @@ class Command extends BaseCommand
     const DEFAULT_HOST = '127.0.0.1';
     const DEFAULT_PORT = 3301;
     const ENV_USER = 'TNT_JOBQUEUE_USER';
-    const ENV_PASS = 'TNT_JOBQUEUE_PASS';
+    const ENV_PASSWORD = 'TNT_JOBQUEUE_PASSWORD';
 
     private $configFactory;
 
@@ -50,7 +50,7 @@ class Command extends BaseCommand
         $user = $input->getOption('user') ?: getenv(self::ENV_USER);
 
         if ($user) {
-            if (!$password = getenv(self::ENV_PASS)) {
+            if (!$password = getenv(self::ENV_PASSWORD)) {
                 $helper = $this->getHelper('question');
                 $question = new Question('Password: ');
                 $question->setHidden(true);
