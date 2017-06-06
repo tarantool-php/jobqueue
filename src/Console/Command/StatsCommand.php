@@ -11,7 +11,7 @@ class StatsCommand extends Command
 {
     protected function configure()
     {
-        $this->addQueueConfiguration();
+        parent::configure();
 
         $this
             ->setName('stats')

@@ -19,14 +19,25 @@ class Command extends BaseCommand
 
     private $configFactory;
 
-    protected function addQueueConfiguration()
+    protected function configure()
     {
         $this
             ->addArgument('queue', InputArgument::REQUIRED)
             ->addOption('host', 'H', InputOption::VALUE_REQUIRED, '', self::DEFAULT_HOST)
             ->addOption('port', 'p', InputOption::VALUE_REQUIRED, '', self::DEFAULT_PORT)
             ->addOption('user', 'u', InputOption::VALUE_REQUIRED, '')
+            ->addOption('config', 'c', InputOption::VALUE_REQUIRED, '')
         ;
+    }
+
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        $customConfigPath = $input->getOption('config');
+        if (null !== $customConfigPath && !is_readable($customConfigPath)) {
+            throw new \RuntimeException("The given configuration file '$customConfigPath' does not exist or it's not readable.");
+        }
+
+        $this->configFactory = $customConfigPath ? include $customConfigPath : new DefaultConfigFactory();
     }
 
     protected function createQueue(InputInterface $input, OutputInterface $output)
@@ -57,10 +68,6 @@ class Command extends BaseCommand
 
     protected function getConfigFactory(): DefaultConfigFactory
     {
-        if (!$this->configFactory) {
-            $this->configFactory = new DefaultConfigFactory();
-        }
-
         return $this->configFactory;
     }
 }

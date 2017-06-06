@@ -13,7 +13,7 @@ class RunCommand extends Command
 
     protected function configure()
     {
-        $this->addQueueConfiguration();
+        parent::configure();
 
         $this
             ->setName('run')

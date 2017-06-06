@@ -10,7 +10,7 @@ class EnqueueCommand extends Command
 {
     protected function configure()
     {
-        $this->addQueueConfiguration();
+        parent::configure();
 
         $this
             ->setName('enqueue')

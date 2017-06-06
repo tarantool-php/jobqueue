@@ -9,7 +9,7 @@ class ClearCommand extends Command
 {
     protected function configure()
     {
-        $this->addQueueConfiguration();
+        parent::configure();
 
         $this
             ->setName('clear')
