@@ -5,15 +5,15 @@ namespace Tarantool\JobQueue\Console\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ClearCommand extends Command
+class TruncateCommand extends Command
 {
     protected function configure()
     {
         parent::configure();
 
         $this
-            ->setName('clear')
-            ->setDescription('Removes all jobs from a queue')
+            ->setName('truncate')
+            ->setDescription('Deletes all tasks from the queue')
         ;
     }
 
@@ -22,6 +22,6 @@ class ClearCommand extends Command
         $queue = $this->createQueue($input, $output);
         $queue->truncate();
 
-        $output->writeln(sprintf('<info>%s</info> was successfully cleared.', $queue->getName()));
+        $output->writeln(sprintf('<info>%s</info> was successfully truncated.', $queue->getName()));
     }
 }

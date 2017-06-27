@@ -3,10 +3,11 @@
 namespace Tarantool\JobQueue\Console;
 
 use Symfony\Component\Console\Application as BaseApplication;
-use Tarantool\JobQueue\Console\Command\ClearCommand;
-use Tarantool\JobQueue\Console\Command\EnqueueCommand;
+use Tarantool\JobQueue\Console\Command\KickCommand;
+use Tarantool\JobQueue\Console\Command\PutCommand;
 use Tarantool\JobQueue\Console\Command\RunCommand;
 use Tarantool\JobQueue\Console\Command\StatsCommand;
+use Tarantool\JobQueue\Console\Command\TruncateCommand;
 
 class Application extends BaseApplication
 {
@@ -16,9 +17,10 @@ class Application extends BaseApplication
     {
         parent::__construct('Tarantool JobQueue', self::VERSION);
 
-        $this->add(new ClearCommand());
-        $this->add(new EnqueueCommand());
+        $this->add(new KickCommand());
+        $this->add(new PutCommand());
         $this->add(new RunCommand());
         $this->add(new StatsCommand());
+        $this->add(new TruncateCommand());
     }
 }

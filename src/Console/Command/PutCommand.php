@@ -6,15 +6,15 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class EnqueueCommand extends Command
+class PutCommand extends Command
 {
     protected function configure()
     {
         parent::configure();
 
         $this
-            ->setName('enqueue')
-            ->setDescription('Enqueues a job')
+            ->setName('put')
+            ->setDescription('Puts a task into the queue')
             ->addArgument('json-data', InputArgument::REQUIRED)
         ;
     }
@@ -32,7 +32,7 @@ class EnqueueCommand extends Command
         $task = $queue->put($data);
 
         $output->writeln(sprintf(
-            '<comment>%s</comment> was successfully enqueued to <info>%s</info> (#<comment>%d</comment>).',
+            '<comment>%s</comment> was successfully put to <info>%s</info> (#<comment>%d</comment>).',
             json_encode($task->getData()),
             $queue->getName(),
             $task->getId()

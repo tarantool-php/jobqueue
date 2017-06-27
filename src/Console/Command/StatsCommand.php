@@ -13,7 +13,7 @@ class StatsCommand extends Command
 
         $this
             ->setName('stats')
-            ->setDescription('Shows statistical information about a queue')
+            ->setDescription('Shows statistical information about the queue')
         ;
     }
 
