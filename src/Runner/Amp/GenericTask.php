@@ -25,7 +25,7 @@ class GenericTask implements Task
         $this->executorsConfigFile = $executorsConfigFile;
     }
 
-    public function run(Environment $environment)
+    public function run(Environment $environment): void
     {
         $data = $this->task->getData();
         $payload = $data['payload'] ?? null;

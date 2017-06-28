@@ -14,7 +14,7 @@ class RecurrenceHandler implements Handler
         $this->handler = $handler;
     }
 
-    public function handle(Task $task, Queue $queue)
+    public function handle(Task $task, Queue $queue): void
     {
         $data = $task->getData();
 

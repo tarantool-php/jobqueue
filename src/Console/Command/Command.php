@@ -19,7 +19,7 @@ class Command extends BaseCommand
 
     private $configFactory;
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->addArgument('queue', InputArgument::REQUIRED)
@@ -30,7 +30,7 @@ class Command extends BaseCommand
         ;
     }
 
-    protected function initialize(InputInterface $input, OutputInterface $output)
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $customConfigPath = $input->getOption('config');
         if (null !== $customConfigPath && !is_readable($customConfigPath)) {
@@ -38,14 +38,12 @@ class Command extends BaseCommand
         }
 
         $this->configFactory = $customConfigPath ? include $customConfigPath : new DefaultConfigFactory();
-    }
-
-    protected function createQueue(InputInterface $input, OutputInterface $output)
-    {
-        $factory = $this->getConfigFactory();
 
         $uri = sprintf('tcp://%s:%s', $input->getOption('host'), $input->getOption('port'));
-        $client = $factory->createClient($uri);
+        $this->configFactory->setConnectionUri($uri);
+
+        $queueName = $input->getArgument('queue');
+        $this->configFactory->setQueueName($queueName);
 
         $user = $input->getOption('user') ?: getenv(self::ENV_USER);
 
@@ -58,12 +56,8 @@ class Command extends BaseCommand
                 $password = $helper->ask($input, $output, $question);
             }
 
-            $client->authenticate($user, $password);
+            $this->configFactory->setCredentials($user, $password);
         }
-
-        $queueName = $input->getArgument('queue');
-
-        return $factory->createQueue($queueName, $client);
     }
 
     protected function getConfigFactory(): DefaultConfigFactory

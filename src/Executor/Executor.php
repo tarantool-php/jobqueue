@@ -6,5 +6,5 @@ use Tarantool\Queue\Queue;
 
 interface Executor
 {
-    public function execute($payload, Queue $queue);
+    public function execute($payload, Queue $queue): void;
 }

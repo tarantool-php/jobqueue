@@ -10,14 +10,14 @@ class ConstantRetryStrategyTest extends TestCase
     /**
      * @dataProvider provideDelayData
      */
-    public function testGetDelay(int $interval, int $attempt, int $delay)
+    public function testGetDelay(int $interval, int $attempt, int $delay): void
     {
         $strategy = new ConstantRetryStrategy($interval);
 
         $this->assertSame($delay, $strategy->getDelay($attempt));
     }
 
-    public function provideDelayData()
+    public function provideDelayData(): array
     {
         return [
             [10, 1, 10],

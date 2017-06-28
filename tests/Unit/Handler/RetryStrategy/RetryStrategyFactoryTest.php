@@ -13,7 +13,7 @@ class RetryStrategyFactoryTest extends TestCase
     /**
      * @dataProvider provideCreateData
      */
-    public function testCreate(string $expectedStrategyClass, string $strategyName, array $args = [])
+    public function testCreate(string $expectedStrategyClass, string $strategyName, array $args = []): void
     {
         $factory = new RetryStrategyFactory();
 
@@ -24,7 +24,7 @@ class RetryStrategyFactoryTest extends TestCase
         $this->assertInstanceOf($expectedStrategyClass, $strategy);
     }
 
-    public function provideCreateData()
+    public function provideCreateData(): array
     {
         return [
             [ConstantRetryStrategy::class, RetryStrategyFactory::CONSTANT],

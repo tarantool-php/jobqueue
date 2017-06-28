@@ -12,13 +12,13 @@ class CallbackExecutorTest extends TestCase
     private $callbackResolver;
     private $queue;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->callbackResolver = $this->createMock(CallbackResolver::class);
         $this->queue = $this->createMock(Queue::class);
     }
 
-    public function testExecuteCallbackWithPayloadArguments()
+    public function testExecuteCallbackWithPayloadArguments(): void
     {
         $executor = new CallbackExecutor($this->callbackResolver);
 
@@ -31,7 +31,7 @@ class CallbackExecutorTest extends TestCase
         $executor->execute(['args' => ['foo' => 42, ['bar'] ]], $this->queue);
     }
 
-    public function testExecuteCallbackWithDefaultArguments()
+    public function testExecuteCallbackWithDefaultArguments(): void
     {
         $executor = new CallbackExecutor($this->callbackResolver);
 
@@ -44,7 +44,7 @@ class CallbackExecutorTest extends TestCase
         $executor->execute('payload', $this->queue);
     }
 
-    public function testExecuteCallbackWithExtraArguments()
+    public function testExecuteCallbackWithExtraArguments(): void
     {
         $_foo = ['name' => 'foo'];
         $_bar = (object) ['name' => 'bar'];

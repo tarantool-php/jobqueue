@@ -18,6 +18,4 @@ console = require('console')
 console.listen('127.0.0.1:33333')
 
 queue = require('queue')
-queue.start()
-
-queue.create_tube('foobar', 'fifottl', { if_not_exists=true })
+queue.create_tube('foobar', 'fifottl', {if_not_exists = true})

@@ -8,5 +8,5 @@ interface RetryStrategy
      * @param int $attempt
      * @return int|null
      */
-    public function getDelay(int $attempt)/*: ?int*/;
+    public function getDelay(int $attempt): ?int;
 }

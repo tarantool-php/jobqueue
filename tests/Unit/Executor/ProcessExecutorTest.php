@@ -8,7 +8,7 @@ use Tarantool\Queue\Queue;
 
 class ProcessExecutorTest extends TestCase
 {
-    public function testExecute()
+    public function testExecute(): void
     {
         $executor = new ProcessExecutor();
         $queue = $this->createMock(Queue::class);

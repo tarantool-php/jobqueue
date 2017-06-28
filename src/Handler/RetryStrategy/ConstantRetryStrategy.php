@@ -11,7 +11,7 @@ class ConstantRetryStrategy implements RetryStrategy
         $this->interval = $interval;
     }
 
-    public function getDelay(int $attempt)
+    public function getDelay(int $attempt): ?int
     {
         return $this->interval;
     }

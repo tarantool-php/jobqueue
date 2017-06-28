@@ -22,37 +22,103 @@ use Tarantool\Queue\Queue;
 
 class DefaultConfigFactory
 {
-    public function createRunner(Queue $queue, Logger $logger, string $executorsConfigFile = null): Runner
+    private $queueName;
+    private $connectionUri;
+    private $username;
+    private $password;
+    private $logFile;
+    private $logLevel;
+    private $executorsConfigFile;
+
+    public function setQueueName(string $name): self
+    {
+        $this->queueName = $name;
+
+        return $this;
+    }
+
+    public function setConnectionUri(string $uri): self
+    {
+        $this->connectionUri = $uri;
+
+        return $this;
+    }
+
+    public function setCredentials(string $username, string $password): self
+    {
+        $this->username = $username;
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function setLogFile(string $logFile): self
+    {
+        $this->logFile = $logFile;
+
+        return $this;
+    }
+
+    public function setLogLevel($logLevel): self
+    {
+        $this->logLevel = self::normalizeLogLevel($logLevel);
+
+        return $this;
+    }
+
+    public function setExecutorsConfigFile(string $configFile): self
+    {
+        $this->executorsConfigFile = $configFile;
+
+        return $this;
+    }
+
+    public function createRunner(string $executorsConfigFile = null): Runner
     {
         return new ParallelRunner(
-            $queue,
+            $this->createQueue(),
             $this->createSuccessHandler(),
             $this->createFailureHandler(),
-            $logger,
+            $this->createLogger(),
             $executorsConfigFile
         );
     }
 
-    public function createQueue(string $name, $client): Queue
+    public function createQueue(): Queue
     {
-        return new Queue($client, $name);
+        $this->ensureQueueName();
+
+        return new Queue($this->createClient(), $this->queueName);
     }
 
-    public function createClient(string $uri)
+    public function createClient(): Client
     {
-        $conn = new StreamConnection($uri);
+        if (!$this->connectionUri) {
+            throw new \LogicException('Connection URI is not defined.');
+        }
+
+        $conn = new StreamConnection($this->connectionUri);
         $conn = new Retryable($conn);
+        $client = new Client($conn, new PurePacker());
 
-        return new Client($conn, new PurePacker());
+        if ($this->username) {
+            // TODO make it lazy
+            $client->authenticate($this->username, $this->password);
+        }
+
+        return $client;
     }
 
-    public function createLogger(string $queueName, string $logFile = null, int $logLevel = null): Logger
+    public function createLogger(): Logger
     {
-        if (!$logFile) {
+        if (!$this->logFile) {
             return new NullLogger();
         }
 
-        return new MonologLogger("$queueName:worker", [new StreamHandler($logFile, $logLevel)]);
+        $this->ensureQueueName();
+        $handlers = [new StreamHandler($this->logFile, $this->logLevel)];
+
+        return new MonologLogger("$this->queueName:worker", $handlers);
     }
 
     public function createSuccessHandler(): Handler
@@ -71,5 +137,29 @@ class DefaultConfigFactory
     public function createRetryStrategyFactory(): RetryStrategyFactory
     {
         return new RetryStrategyFactory();
+    }
+
+    private function ensureQueueName(): void
+    {
+        if (!$this->queueName) {
+            throw new \LogicException('Queue name is not defined.');
+        }
+    }
+
+    private static function normalizeLogLevel($name): int
+    {
+        // level is already translated to logger constant, return as-is
+        if (is_int($name)) {
+            return $name;
+        }
+
+        $levels = MonologLogger::getLevels();
+        $upper = strtoupper($name);
+
+        if (!isset($levels[$upper])) {
+            throw new \InvalidArgumentException("Provided logging level '$name' does not exist. Must be a valid monolog logging level.");
+        }
+
+        return $levels[$upper];
     }
 }

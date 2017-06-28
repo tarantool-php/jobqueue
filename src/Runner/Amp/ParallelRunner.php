@@ -26,7 +26,7 @@ class ParallelRunner implements Runner
         $this->executorsConfigFile = $executorsConfigFile;
     }
 
-    public function run(int $idleTimeout = 1)
+    public function run(int $idleTimeout = 1): void
     {
         Loop::setErrorHandler(function (\Throwable $e) {
             $this->logger->critical($e->getMessage());

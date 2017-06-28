@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class KickCommand extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -19,10 +19,10 @@ class KickCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $count = $input->getArgument('count');
-        $queue = $this->createQueue($input, $output);
+        $queue = $this->getConfigFactory()->createQueue();
 
         $affected = $queue->kick($count);
 

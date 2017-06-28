@@ -11,7 +11,7 @@ class LimitedRetryStrategyTest extends TestCase
     /**
      * @dataProvider provideDelayData
      */
-    public function testGetDelay(int $retryLimit, int $attempt, int $mockDelay, ?int $resultDelay)
+    public function testGetDelay(int $retryLimit, int $attempt, int $mockDelay, ?int $resultDelay): void
     {
         $mock = $this->createMock(RetryStrategy::class);
         $mock->expects($this->any())->method('getDelay')
@@ -23,7 +23,7 @@ class LimitedRetryStrategyTest extends TestCase
         $this->assertSame($resultDelay, $strategy->getDelay($attempt));
     }
 
-    public function provideDelayData()
+    public function provideDelayData(): array
     {
         return [
             [2, 1, 10, 10],

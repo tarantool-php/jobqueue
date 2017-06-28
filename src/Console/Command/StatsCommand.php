@@ -7,7 +7,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class StatsCommand extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -17,9 +17,9 @@ class StatsCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $queue = $this->createQueue($input, $output);
+        $queue = $this->getConfigFactory()->createQueue();
         $stats = $queue->stats();
 
         $output->writeln(sprintf('Queue: <options=bold>%s</>', $queue->getName()));

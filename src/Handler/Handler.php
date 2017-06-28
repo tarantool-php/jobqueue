@@ -7,5 +7,5 @@ use Tarantool\Queue\Task;
 
 interface Handler
 {
-    public function handle(Task $task, Queue $queue);
+    public function handle(Task $task, Queue $queue): void;
 }

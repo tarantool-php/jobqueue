@@ -17,7 +17,7 @@ class CallbackExecutor implements Executor
         $this->autowiredArgs = $autowiredArgs;
     }
 
-    public function execute($payload, Queue $queue)
+    public function execute($payload, Queue $queue): void
     {
         $callback = $this->callbackResolver->resolve($payload);
         $args = $payload['args'] ?? [];

@@ -8,7 +8,7 @@ use Tarantool\Queue\Queue;
 
 class ProcessExecutor implements Executor
 {
-    public function execute($payload, Queue $queue)
+    public function execute($payload, Queue $queue): void
     {
         $process = $this->createProcess($payload);
         $process->mustRun();

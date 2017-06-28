@@ -26,11 +26,11 @@ class ExecutorChain implements Executor
         return $this;
     }
 
-    public function execute($payload, Queue $queue)
+    public function execute($payload, Queue $queue): void
     {
         foreach ($this->executors as $executor) {
             try {
-                return $executor->execute($payload, $queue);
+                $executor->execute($payload, $queue);
             } catch (BadPayloadException $e) {
                 // try next executor
             }

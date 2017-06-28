@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class PutCommand extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -19,16 +19,16 @@ class PutCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $json = $input->getArgument('json-data');
-        $queue = $this->createQueue($input, $output);
-
         $data = json_decode($json, true);
+
         if (!is_array($data)) {
             throw new \InvalidArgumentException('Invalid json data.');
         }
 
+        $queue = $this->getConfigFactory()->createQueue();
         $task = $queue->put($data);
 
         $output->writeln(sprintf(

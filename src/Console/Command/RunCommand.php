@@ -11,7 +11,7 @@ class RunCommand extends Command
 {
     const DEFAULT_IDLE_TIMEOUT = 1;
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -25,46 +25,26 @@ class RunCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $queue = $this->createQueue($input, $output);
-        $logger = $this->createLogger($queue->getName(), $input);
+        parent::initialize($input, $output);
 
+        $configFactory = $this->getConfigFactory();
+
+        if ($logFile = $input->getOption('log-file')) {
+            $configFactory->setLogFile($logFile);
+        }
+        if ($logLevel = $input->getOption('log-level')) {
+            $configFactory->setLogLevel($logLevel);
+        }
         if ($executorsConfigFile = $input->getOption('executors-config')) {
-            $executorsConfigFile = realpath($executorsConfigFile);
+            $configFactory->setExecutorsConfigFile(realpath($executorsConfigFile));
         }
+    }
 
-        $runner = $this->getConfigFactory()->createRunner(
-            $queue,
-            $logger,
-            $executorsConfigFile
-        );
-
+    protected function execute(InputInterface $input, OutputInterface $output): void
+    {
+        $runner = $this->getConfigFactory()->createRunner();
         $runner->run($input->getOption('idle-timeout'));
-    }
-
-    private function createLogger(string $queueName, InputInterface $input)
-    {
-        $logFile = $input->getOption('log-file');
-        $logLevel = self::translateLogLevel($input->getOption('log-level'));
-
-        return $this->getConfigFactory()->createLogger($queueName, $logFile, $logLevel);
-    }
-
-    private static function translateLogLevel($name)
-    {
-        // level is already translated to logger constant, return as-is
-        if (is_int($name)) {
-            return $name;
-        }
-
-        $levels = Logger::getLevels();
-        $upper = strtoupper($name);
-
-        if (!isset($levels[$upper])) {
-            throw new \InvalidArgumentException("Provided logging level '$name' does not exist. Must be a valid monolog logging level.");
-        }
-
-        return $levels[$upper];
     }
 }
