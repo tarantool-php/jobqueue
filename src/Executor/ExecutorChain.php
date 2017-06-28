@@ -31,6 +31,8 @@ class ExecutorChain implements Executor
         foreach ($this->executors as $executor) {
             try {
                 $executor->execute($payload, $queue);
+
+                return;
             } catch (BadPayloadException $e) {
                 // try next executor
             }

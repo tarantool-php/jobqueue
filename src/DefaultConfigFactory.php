@@ -73,14 +73,14 @@ class DefaultConfigFactory
         return $this;
     }
 
-    public function createRunner(string $executorsConfigFile = null): Runner
+    public function createRunner(): Runner
     {
         return new ParallelRunner(
             $this->createQueue(),
             $this->createSuccessHandler(),
             $this->createFailureHandler(),
             $this->createLogger(),
-            $executorsConfigFile
+            $this->executorsConfigFile
         );
     }
 

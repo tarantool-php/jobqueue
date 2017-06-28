@@ -18,7 +18,7 @@ return new class extends DefaultConfigFactory
                 $this->handler = $handler;
             }
 
-            public function handle(Task $task, Queue $queue)
+            public function handle(Task $task, Queue $queue): void
             {
                 $this->handler->handle($task, $queue);
 
