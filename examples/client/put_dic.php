@@ -1,14 +1,16 @@
 <?php
 
+use Tarantool\JobQueue\JobOptions;
+
 require __DIR__.'/../../vendor/autoload.php';
 
 /** @var Tarantool\Queue\Queue $queue */
 $queue = require __DIR__.'/queue.php';
 
 $task = $queue->put([
-    'payload' => [
-        'service' => 'greet',
-        'args' => ['World'],
+    JobOptions::PAYLOAD => [
+        JobOptions::PAYLOAD_SERVICE => 'greet',
+        JobOptions::PAYLOAD_ARGS => ['World'],
     ],
 ]);
 

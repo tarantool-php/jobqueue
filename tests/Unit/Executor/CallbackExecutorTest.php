@@ -37,11 +37,11 @@ class CallbackExecutorTest extends TestCase
 
         $this->callbackResolver->expects($this->atLeastOnce())->method('resolve')
             ->willReturn(function ($payload, $queue) {
-                $this->assertSame('payload', $payload);
+                $this->assertSame('foobar', $payload);
                 $this->assertSame($this->queue, $queue);
             });
 
-        $executor->execute('payload', $this->queue);
+        $executor->execute('foobar', $this->queue);
     }
 
     public function testExecuteCallbackWithExtraArguments(): void

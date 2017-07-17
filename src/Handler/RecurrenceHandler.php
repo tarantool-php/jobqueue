@@ -2,8 +2,10 @@
 
 namespace Tarantool\JobQueue\Handler;
 
+use Tarantool\JobQueue\JobOptions;
 use Tarantool\Queue\Queue;
 use Tarantool\Queue\Task;
+use Tarantool\Queue\TtlOptions;
 
 class RecurrenceHandler implements Handler
 {
@@ -18,12 +20,12 @@ class RecurrenceHandler implements Handler
     {
         $data = $task->getData();
 
-        if (empty($data['recurrence'])) {
+        if (empty($data[JobOptions::RECURRENCE])) {
             $this->handler->handle($task, $queue);
 
             return;
         }
 
-        $queue->release($task->getId(), ['delay' => $data['recurrence']]);
+        $queue->release($task->getId(), [TtlOptions::DELAY => $data[JobOptions::RECURRENCE]]);
     }
 }

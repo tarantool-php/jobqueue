@@ -4,6 +4,7 @@ namespace Tarantool\JobQueue\Executor\CallbackResolver;
 
 use Psr\Container\ContainerInterface as Container;
 use Tarantool\JobQueue\Exception\BadPayloadException;
+use Tarantool\JobQueue\JobOptions;
 
 class ContainerCallbackResolver implements CallbackResolver
 {
@@ -18,10 +19,10 @@ class ContainerCallbackResolver implements CallbackResolver
 
     public function resolve($payload): callable
     {
-        if (!empty($payload['service'])) {
-            return $this->container->get($this->idPrefix.$payload['service']);
+        if (!empty($payload[JobOptions::PAYLOAD_SERVICE])) {
+            return $this->container->get($this->idPrefix.$payload[JobOptions::PAYLOAD_SERVICE]);
         }
 
-        throw BadPayloadException::missingOrEmptyKeyValue($payload, 'service', 'string', __CLASS__);
+        throw BadPayloadException::missingOrEmptyKeyValue($payload, JobOptions::PAYLOAD_SERVICE, 'string', __CLASS__);
     }
 }

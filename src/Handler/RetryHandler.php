@@ -4,8 +4,10 @@ namespace Tarantool\JobQueue\Handler;
 
 use Tarantool\JobQueue\Handler\RetryStrategy\LimitedRetryStrategy;
 use Tarantool\JobQueue\Handler\RetryStrategy\RetryStrategyFactory;
+use Tarantool\JobQueue\JobOptions;
 use Tarantool\Queue\Queue;
 use Tarantool\Queue\Task;
+use Tarantool\Queue\TtlOptions;
 
 class RetryHandler implements Handler
 {
@@ -13,9 +15,9 @@ class RetryHandler implements Handler
     private $retryStrategyFactory;
 
     private static $defaults = [
-        'retry_limit' => 2,
-        'retry_attempt' => 1,
-        'retry_strategy' => RetryStrategyFactory::LINEAR,
+        JobOptions::RETRY_LIMIT => 2,
+        JobOptions::RETRY_ATTEMPT => 1,
+        JobOptions::RETRY_STRATEGY => RetryStrategyFactory::LINEAR,
     ];
 
     public function __construct(Handler $handler, RetryStrategyFactory $retryStrategyFactory)
@@ -27,10 +29,10 @@ class RetryHandler implements Handler
     public function handle(Task $task, Queue $queue): void
     {
         $data = $task->getData() + self::$defaults;
-        $attempt = $data['retry_attempt'];
+        $attempt = $data[JobOptions::RETRY_ATTEMPT];
 
-        $strategy = $this->retryStrategyFactory->create($data['retry_strategy']);
-        $strategy = new LimitedRetryStrategy($strategy, $data['retry_limit']);
+        $strategy = $this->retryStrategyFactory->create($data[JobOptions::RETRY_STRATEGY]);
+        $strategy = new LimitedRetryStrategy($strategy, $data[JobOptions::RETRY_LIMIT]);
 
         if (null === $delay = $strategy->getDelay($attempt)) {
             $this->handler->handle($task, $queue);
@@ -39,7 +41,7 @@ class RetryHandler implements Handler
         }
 
         // TODO replace these 2 calls with an atomic one
-        $queue->put(['retry_attempt' => $attempt + 1] + $data, ['delay' => $delay]);
+        $queue->put([JobOptions::RETRY_ATTEMPT => $attempt + 1] + $data, [TtlOptions::DELAY => $delay]);
         $queue->delete($task->getId());
     }
 }

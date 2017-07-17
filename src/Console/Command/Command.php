@@ -25,8 +25,8 @@ class Command extends BaseCommand
             ->addArgument('queue', InputArgument::REQUIRED)
             ->addOption('host', 'H', InputOption::VALUE_REQUIRED, '', self::DEFAULT_HOST)
             ->addOption('port', 'p', InputOption::VALUE_REQUIRED, '', self::DEFAULT_PORT)
-            ->addOption('user', 'u', InputOption::VALUE_REQUIRED, '')
-            ->addOption('config', 'c', InputOption::VALUE_REQUIRED, '')
+            ->addOption('user', 'u', InputOption::VALUE_REQUIRED)
+            ->addOption('config', 'c', InputOption::VALUE_REQUIRED)
         ;
     }
 
@@ -46,7 +46,6 @@ class Command extends BaseCommand
         $this->configFactory->setQueueName($queueName);
 
         $user = $input->getOption('user') ?: getenv(self::ENV_USER);
-
         if ($user) {
             if (!$password = getenv(self::ENV_PASSWORD)) {
                 $helper = $this->getHelper('question');
