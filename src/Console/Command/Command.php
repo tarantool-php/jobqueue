@@ -17,8 +17,6 @@ class Command extends BaseCommand
     const ENV_USER = 'TNT_JOBQUEUE_USER';
     const ENV_PASSWORD = 'TNT_JOBQUEUE_PASSWORD';
 
-    private $configFactory;
-
     protected function configure(): void
     {
         $this
@@ -30,20 +28,20 @@ class Command extends BaseCommand
         ;
     }
 
-    protected function initialize(InputInterface $input, OutputInterface $output): void
+    protected function createConfigFactory(InputInterface $input, OutputInterface $output): DefaultConfigFactory
     {
         $customConfigPath = $input->getOption('config');
         if (null !== $customConfigPath && !is_readable($customConfigPath)) {
             throw new \RuntimeException("The given configuration file '$customConfigPath' does not exist or it's not readable.");
         }
 
-        $this->configFactory = $customConfigPath ? include $customConfigPath : new DefaultConfigFactory();
+        $configFactory = $customConfigPath ? include $customConfigPath : new DefaultConfigFactory();
 
         $uri = sprintf('tcp://%s:%s', $input->getOption('host'), $input->getOption('port'));
-        $this->configFactory->setConnectionUri($uri);
+        $configFactory->setConnectionUri($uri);
 
         $queueName = $input->getArgument('queue');
-        $this->configFactory->setQueueName($queueName);
+        $configFactory->setQueueName($queueName);
 
         $user = $input->getOption('user') ?: getenv(self::ENV_USER);
         if ($user) {
@@ -55,12 +53,9 @@ class Command extends BaseCommand
                 $password = $helper->ask($input, $output, $question);
             }
 
-            $this->configFactory->setCredentials($user, $password);
+            $configFactory->setCredentials($user, $password);
         }
-    }
 
-    protected function getConfigFactory(): DefaultConfigFactory
-    {
-        return $this->configFactory;
+        return $configFactory;
     }
 }

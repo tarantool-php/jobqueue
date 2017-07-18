@@ -19,7 +19,7 @@ class StatsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $queue = $this->getConfigFactory()->createQueue();
+        $queue = $this->createConfigFactory($input, $output)->createQueue();
         $stats = $queue->stats();
 
         $output->writeln(sprintf('Queue: <options=bold>%s</>', $queue->getName()));

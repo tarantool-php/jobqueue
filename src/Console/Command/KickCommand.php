@@ -21,8 +21,8 @@ class KickCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
+        $queue = $this->createConfigFactory($input, $output)->createQueue();
         $count = $input->getArgument('count');
-        $queue = $this->getConfigFactory()->createQueue();
 
         $affected = $queue->kick($count);
 

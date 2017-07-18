@@ -28,7 +28,7 @@ class PutCommand extends Command
             throw new \InvalidArgumentException('Invalid json data.');
         }
 
-        $queue = $this->getConfigFactory()->createQueue();
+        $queue = $this->createConfigFactory($input, $output)->createQueue();
         $task = $queue->put($data);
 
         $output->writeln(sprintf(

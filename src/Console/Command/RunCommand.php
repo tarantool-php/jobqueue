@@ -25,11 +25,9 @@ class RunCommand extends Command
         ;
     }
 
-    protected function initialize(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        parent::initialize($input, $output);
-
-        $configFactory = $this->getConfigFactory();
+        $configFactory = $this->createConfigFactory($input, $output);
 
         if ($logFile = $input->getOption('log-file')) {
             $configFactory->setLogFile($logFile);
@@ -40,11 +38,8 @@ class RunCommand extends Command
         if ($executorsConfigFile = $input->getOption('executors-config')) {
             $configFactory->setExecutorsConfigFile(realpath($executorsConfigFile));
         }
-    }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
-    {
-        $runner = $this->getConfigFactory()->createRunner();
+        $runner = $configFactory->createRunner();
         $runner->run($input->getOption('idle-timeout'));
     }
 }
