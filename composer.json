@@ -28,6 +28,7 @@
         "symfony/process": "^3.2"
     },
     "suggest": {
+        "psr/container": "For using CallbackExecutor\\ContainerCallbackResolver.",
         "rybakit/arguments-resolver": "For using CallbackExecutor.",
         "symfony/process": "For using ProcessExecutor."
     },
