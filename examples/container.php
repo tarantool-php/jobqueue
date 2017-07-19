@@ -2,8 +2,8 @@
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger as MonologLogger;
+use Pimple\Container;
 use Psr\Log\LoggerInterface as Logger;
-use Xtreamwayz\Pimple\Container;
 
 $container = new Container([
     'job.greet.yell' => false,
