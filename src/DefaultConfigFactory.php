@@ -24,6 +24,7 @@ class DefaultConfigFactory
 {
     private $queueName;
     private $connectionUri;
+    private $connectionOptions;
     private $username;
     private $password;
     private $logFile;
@@ -40,6 +41,13 @@ class DefaultConfigFactory
     public function setConnectionUri(string $uri): self
     {
         $this->connectionUri = $uri;
+
+        return $this;
+    }
+
+    public function setConnectionOptions(array $options): self
+    {
+        $this->connectionOptions = $options;
 
         return $this;
     }
@@ -97,7 +105,7 @@ class DefaultConfigFactory
             throw new \LogicException('Connection URI is not defined.');
         }
 
-        $conn = new StreamConnection($this->connectionUri);
+        $conn = new StreamConnection($this->connectionUri, $this->connectionOptions);
         $conn = new Retryable($conn);
         $client = new Client($conn, new PurePacker());
 
