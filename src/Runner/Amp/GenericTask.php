@@ -52,20 +52,15 @@ class GenericTask implements Task
             return new ProcessExecutor();
         }
 
-        $result = require $this->executorsConfigFile;
-        if ($result instanceof Executor) {
-            return $result;
+        $executors = require $this->executorsConfigFile;
+        if ($executors instanceof Executor) {
+            return $executors;
         }
 
-        if (!is_array($result)) {
+        if (!is_array($executors)) {
             throw new \RuntimeException(sprintf('%s must return an Executor object or an array of Executor objects.', $this->executorsConfigFile));
         }
 
-        $chain = new ExecutorChain();
-        foreach ($result as $executor) {
-            $chain->add($executor);
-        }
-
-        return $chain;
+        return new ExecutorChain($executors);
     }
 }
