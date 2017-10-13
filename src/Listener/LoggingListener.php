@@ -4,6 +4,10 @@ namespace Tarantool\JobQueue\Listener;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Tarantool\JobQueue\Listener\Event\RunnerFailedEvent;
+use Tarantool\JobQueue\Listener\Event\RunnerIdleEvent;
+use Tarantool\JobQueue\Listener\Event\TaskFailedEvent;
+use Tarantool\JobQueue\Listener\Event\TaskProcessedEvent;
 
 class LoggingListener implements EventSubscriberInterface
 {

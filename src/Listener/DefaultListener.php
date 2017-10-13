@@ -3,6 +3,8 @@
 namespace Tarantool\JobQueue\Listener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Tarantool\JobQueue\Listener\Event\TaskFailedEvent;
+use Tarantool\JobQueue\Listener\Event\TaskProcessedEvent;
 
 class DefaultListener implements EventSubscriberInterface
 {

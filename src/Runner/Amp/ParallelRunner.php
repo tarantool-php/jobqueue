@@ -5,11 +5,11 @@ namespace Tarantool\JobQueue\Runner\Amp;
 use Amp\Loop;
 use Amp\Parallel\Worker\DefaultPool;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface as EventDispatcher;
+use Tarantool\JobQueue\Listener\Event\RunnerFailedEvent;
+use Tarantool\JobQueue\Listener\Event\RunnerIdleEvent;
+use Tarantool\JobQueue\Listener\Event\TaskFailedEvent;
+use Tarantool\JobQueue\Listener\Event\TaskProcessedEvent;
 use Tarantool\JobQueue\Listener\Events;
-use Tarantool\JobQueue\Listener\RunnerFailedEvent;
-use Tarantool\JobQueue\Listener\RunnerIdleEvent;
-use Tarantool\JobQueue\Listener\TaskFailedEvent;
-use Tarantool\JobQueue\Listener\TaskProcessedEvent;
 use Tarantool\JobQueue\Runner\Runner;
 use Tarantool\Queue\Queue;
 

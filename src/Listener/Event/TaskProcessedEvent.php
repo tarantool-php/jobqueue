@@ -1,6 +1,6 @@
 <?php
 
-namespace Tarantool\JobQueue\Listener;
+namespace Tarantool\JobQueue\Listener\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 use Tarantool\Queue\Queue;

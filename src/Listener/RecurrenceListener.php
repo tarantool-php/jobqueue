@@ -4,6 +4,7 @@ namespace Tarantool\JobQueue\Listener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tarantool\JobQueue\JobOptions;
+use Tarantool\JobQueue\Listener\Event\TaskProcessedEvent;
 use Tarantool\Queue\TtlOptions;
 
 class RecurrenceListener implements EventSubscriberInterface

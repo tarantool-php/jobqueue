@@ -1,6 +1,6 @@
 <?php
 
-namespace Tarantool\JobQueue\Listener;
+namespace Tarantool\JobQueue\Listener\Event;
 
 use Tarantool\Queue\Task;
 
