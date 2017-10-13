@@ -1,17 +1,15 @@
 <?php
 
-namespace Tarantool\JobQueue\Handler;
+namespace Tarantool\JobQueue\Listener;
 
-use Tarantool\JobQueue\Handler\RetryStrategy\LimitedRetryStrategy;
-use Tarantool\JobQueue\Handler\RetryStrategy\RetryStrategyFactory;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Tarantool\JobQueue\RetryStrategy\LimitedRetryStrategy;
+use Tarantool\JobQueue\RetryStrategy\RetryStrategyFactory;
 use Tarantool\JobQueue\JobOptions;
-use Tarantool\Queue\Queue;
-use Tarantool\Queue\Task;
 use Tarantool\Queue\TtlOptions;
 
-class RetryHandler implements Handler
+class RetryListener implements EventSubscriberInterface
 {
-    private $handler;
     private $retryStrategyFactory;
 
     private static $defaults = [
@@ -20,14 +18,22 @@ class RetryHandler implements Handler
         JobOptions::RETRY_STRATEGY => RetryStrategyFactory::LINEAR,
     ];
 
-    public function __construct(Handler $handler, RetryStrategyFactory $retryStrategyFactory)
+    public function __construct(RetryStrategyFactory $retryStrategyFactory)
     {
-        $this->handler = $handler;
         $this->retryStrategyFactory = $retryStrategyFactory;
     }
 
-    public function handle(Task $task, Queue $queue): void
+    public static function getSubscribedEvents(): array
     {
+        return [
+            Events::TASK_FAILED => 'onTaskFailed',
+            Events::TASK_PROCESSED => 'onTaskProcessed',
+        ];
+    }
+
+    public function onTaskFailed(TaskFailedEvent $event): void
+    {
+        $task = $event->getTask();
         $data = $task->getData() + self::$defaults;
         $attempt = $data[JobOptions::RETRY_ATTEMPT];
 
@@ -35,13 +41,22 @@ class RetryHandler implements Handler
         $strategy = new LimitedRetryStrategy($strategy, $data[JobOptions::RETRY_LIMIT]);
 
         if (null === $delay = $strategy->getDelay($attempt)) {
-            $this->handler->handle($task, $queue);
-
             return;
         }
+
+        $queue = $event->getQueue();
 
         // TODO replace these 2 calls with an atomic one
         $queue->put([JobOptions::RETRY_ATTEMPT => $attempt + 1] + $data, [TtlOptions::DELAY => $delay]);
         $queue->delete($task->getId());
+
+        $event->stopPropagation();
+    }
+
+    public function onTaskProcessed(TaskProcessedEvent $event): void
+    {
+        $data = $event->getTaskData();
+        unset($data[JobOptions::RETRY_ATTEMPT]);
+        $event->setNewTaskData($data);
     }
 }

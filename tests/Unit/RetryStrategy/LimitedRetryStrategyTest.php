@@ -1,10 +1,10 @@
 <?php
 
-namespace Tarantool\JobQueue\Tests\Unit\Handler\RetryStrategy;
+namespace Tarantool\JobQueue\Tests\Unit\RetryStrategy;
 
 use PHPUnit\Framework\TestCase;
-use Tarantool\JobQueue\Handler\RetryStrategy\LimitedRetryStrategy;
-use Tarantool\JobQueue\Handler\RetryStrategy\RetryStrategy;
+use Tarantool\JobQueue\RetryStrategy\LimitedRetryStrategy;
+use Tarantool\JobQueue\RetryStrategy\RetryStrategy;
 
 class LimitedRetryStrategyTest extends TestCase
 {

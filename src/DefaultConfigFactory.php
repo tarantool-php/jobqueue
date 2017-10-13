@@ -6,16 +6,17 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger as MonologLogger;
 use Psr\Log\LoggerInterface as Logger;
 use Psr\Log\NullLogger;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Tarantool\Client\Client;
 use Tarantool\Client\Connection\Retryable;
 use Tarantool\Client\Connection\StreamConnection;
 use Tarantool\Client\Packer\PurePacker;
-use Tarantool\JobQueue\Handler\AckHandler;
-use Tarantool\JobQueue\Handler\BuryHandler;
-use Tarantool\JobQueue\Handler\Handler;
-use Tarantool\JobQueue\Handler\RecurrenceHandler;
-use Tarantool\JobQueue\Handler\RetryHandler;
-use Tarantool\JobQueue\Handler\RetryStrategy\RetryStrategyFactory;
+use Tarantool\JobQueue\RetryStrategy\RetryStrategyFactory;
+use Tarantool\JobQueue\Listener\DefaultListener;
+use Tarantool\JobQueue\Listener\LoggingListener;
+use Tarantool\JobQueue\Listener\RecurrenceListener;
+use Tarantool\JobQueue\Listener\RetryListener;
 use Tarantool\JobQueue\Runner\Amp\ParallelRunner;
 use Tarantool\JobQueue\Runner\Runner;
 use Tarantool\Queue\Queue;
@@ -85,9 +86,7 @@ class DefaultConfigFactory
     {
         return new ParallelRunner(
             $this->createQueue(),
-            $this->createSuccessHandler(),
-            $this->createFailureHandler(),
-            $this->createLogger(),
+            $this->createEventDispatcher(),
             $this->executorsConfigFile
         );
     }
@@ -129,17 +128,16 @@ class DefaultConfigFactory
         return new MonologLogger("$this->queueName:worker", $handlers);
     }
 
-    public function createSuccessHandler(): Handler
+    public function createEventDispatcher(): EventDispatcherInterface
     {
-        return new RecurrenceHandler(new AckHandler());
-    }
+        $eventDispatcher = new EventDispatcher();
 
-    public function createFailureHandler(): Handler
-    {
-        return new RetryHandler(
-            new BuryHandler(),
-            $this->createRetryStrategyFactory()
-        );
+        $eventDispatcher->addSubscriber(new DefaultListener());
+        $eventDispatcher->addSubscriber(new RecurrenceListener());
+        $eventDispatcher->addSubscriber(new RetryListener($this->createRetryStrategyFactory()));
+        $eventDispatcher->addSubscriber(new LoggingListener($this->createLogger()));
+
+        return $eventDispatcher;
     }
 
     public function createRetryStrategyFactory(): RetryStrategyFactory

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tarantool\JobQueue\Handler\RetryStrategy;
+namespace Tarantool\JobQueue\RetryStrategy;
 
 class ExponentialRetryStrategy implements RetryStrategy
 {

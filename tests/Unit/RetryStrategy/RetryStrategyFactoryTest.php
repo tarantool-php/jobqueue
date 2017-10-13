@@ -1,12 +1,12 @@
 <?php
 
-namespace Tarantool\JobQueue\Tests\Unit\Handler\RetryStrategy;
+namespace Tarantool\JobQueue\Tests\Unit\RetryStrategy;
 
 use PHPUnit\Framework\TestCase;
-use Tarantool\JobQueue\Handler\RetryStrategy\ConstantRetryStrategy;
-use Tarantool\JobQueue\Handler\RetryStrategy\ExponentialRetryStrategy;
-use Tarantool\JobQueue\Handler\RetryStrategy\LinearRetryStrategy;
-use Tarantool\JobQueue\Handler\RetryStrategy\RetryStrategyFactory;
+use Tarantool\JobQueue\RetryStrategy\ConstantRetryStrategy;
+use Tarantool\JobQueue\RetryStrategy\ExponentialRetryStrategy;
+use Tarantool\JobQueue\RetryStrategy\LinearRetryStrategy;
+use Tarantool\JobQueue\RetryStrategy\RetryStrategyFactory;
 
 class RetryStrategyFactoryTest extends TestCase
 {

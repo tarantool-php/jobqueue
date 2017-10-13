@@ -4,33 +4,34 @@ namespace Tarantool\JobQueue\Runner\Amp;
 
 use Amp\Loop;
 use Amp\Parallel\Worker\DefaultPool;
-use Psr\Log\LoggerInterface as Logger;
-use Tarantool\JobQueue\Handler\Handler;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface as EventDispatcher;
+use Tarantool\JobQueue\Listener\Events;
+use Tarantool\JobQueue\Listener\RunnerFailedEvent;
+use Tarantool\JobQueue\Listener\RunnerIdleEvent;
+use Tarantool\JobQueue\Listener\TaskFailedEvent;
+use Tarantool\JobQueue\Listener\TaskProcessedEvent;
 use Tarantool\JobQueue\Runner\Runner;
 use Tarantool\Queue\Queue;
 
 class ParallelRunner implements Runner
 {
     private $queue;
-    private $successHandler;
-    private $failureHandler;
-    private $logger;
+    private $eventDispatcher;
     private $executorsConfigFile;
 
-    public function __construct(Queue $queue, Handler $successHandler, Handler $failureHandler, Logger $logger, string $executorsConfigFile = null)
+    public function __construct(Queue $queue, EventDispatcher $eventDispatcher, string $executorsConfigFile = null)
     {
         $this->queue = $queue;
-        $this->successHandler = $successHandler;
-        $this->failureHandler = $failureHandler;
-        $this->logger = $logger;
+        $this->eventDispatcher = $eventDispatcher;
         $this->executorsConfigFile = $executorsConfigFile;
     }
 
     public function run(int $idleTimeout = 1): void
     {
-        Loop::setErrorHandler(function (\Throwable $e) {
-            $this->logger->critical($e->getMessage());
-            throw $e;
+        Loop::setErrorHandler(function (\Throwable $error) {
+            $event = new RunnerFailedEvent($error, $this->queue);
+            $this->eventDispatcher->dispatch(Events::RUNNER_FAILED, $event);
+            throw $error;
         });
 
         Loop::run(function() use ($idleTimeout) {
@@ -39,7 +40,8 @@ class ParallelRunner implements Runner
 
             Loop::repeat(100, function () use ($pool, $idleTimeout) {
                 if (!$queueTask = $this->queue->take($idleTimeout)) {
-                    $this->logger->debug('Idling...');
+                    $event = new RunnerIdleEvent($this->queue);
+                    $this->eventDispatcher->dispatch(Events::RUNNER_IDLE, $event);
 
                     return;
                 }
@@ -47,13 +49,12 @@ class ParallelRunner implements Runner
                 try {
                     $workerTask = new GenericTask($queueTask, $this->queue, $this->executorsConfigFile);
                     yield $pool->enqueue($workerTask);
-                    //$workerTask->run(new \Amp\Parallel\Worker\BasicEnvironment());
 
-                    $this->successHandler->handle($queueTask, $this->queue);
-                    $this->logger->info(sprintf('Task #%d was successfully executed.', $queueTask->getId()), $queueTask->getData());
-                } catch (\Throwable $e) {
-                    $this->failureHandler->handle($queueTask, $this->queue);
-                    $this->logger->error(sprintf('Failed to execute task #%d: %s', $queueTask->getId(), $e->getMessage()), $queueTask->getData());
+                    $event = new TaskProcessedEvent($queueTask, $this->queue);
+                    $this->eventDispatcher->dispatch(Events::TASK_PROCESSED, $event);
+                } catch (\Throwable $error) {
+                    $event = new TaskFailedEvent($error, $queueTask, $this->queue);
+                    $this->eventDispatcher->dispatch(Events::TASK_FAILED, $event);
                 }
             });
         });
