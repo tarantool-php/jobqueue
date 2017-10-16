@@ -2,9 +2,11 @@
 
 namespace Tarantool\JobQueue\Listener;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tarantool\JobQueue\Listener\Event\TaskFailedEvent;
 use Tarantool\JobQueue\Listener\Event\TaskProcessedEvent;
+use Tarantool\JobQueue\Listener\Event\TaskSucceededEvent;
 
 class DefaultListener implements EventSubscriberInterface
 {
@@ -12,32 +14,33 @@ class DefaultListener implements EventSubscriberInterface
     {
         return [
             Events::TASK_FAILED => ['onTaskFailed', -100],
-            Events::TASK_PROCESSED => ['onTaskProcessed', -100],
+            Events::TASK_SUCCEEDED => ['onTaskSucceeded', -100],
         ];
     }
 
-    public function onTaskFailed(TaskFailedEvent $event): void
+    public function onTaskFailed(TaskFailedEvent $event, string $eventName, EventDispatcherInterface $eventDispatcher): void
     {
         $task = $event->getTask();
         $queue = $event->getQueue();
 
-        $queue->bury($task->getId());
+        $newTask = $queue->bury($task->getId());
 
         $event->stopPropagation();
+
+        $taskProcessedEvent = new TaskProcessedEvent($newTask, $queue);
+        $eventDispatcher->dispatch(Events::TASK_PROCESSED, $taskProcessedEvent);
     }
 
-    public function onTaskProcessed(TaskProcessedEvent $event): void
+    public function onTaskSucceeded(TaskSucceededEvent $event, string $eventName, EventDispatcherInterface $eventDispatcher): void
     {
         $task = $event->getTask();
         $queue = $event->getQueue();
 
-        if ($newData = $event->getNewTaskData()) {
-            $queue->put($newData);
-            $queue->delete($task->getId());
-        } else {
-            $queue->ack($task->getId());
-        }
+        $newTask = $queue->ack($task->getId());
 
         $event->stopPropagation();
+
+        $taskProcessedEvent = new TaskProcessedEvent($newTask, $queue);
+        $eventDispatcher->dispatch(Events::TASK_PROCESSED, $taskProcessedEvent);
     }
 }

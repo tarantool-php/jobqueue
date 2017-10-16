@@ -2,9 +2,11 @@
 
 namespace Tarantool\JobQueue\Listener;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tarantool\JobQueue\JobOptions;
 use Tarantool\JobQueue\Listener\Event\TaskProcessedEvent;
+use Tarantool\JobQueue\Listener\Event\TaskSucceededEvent;
 use Tarantool\Queue\TtlOptions;
 
 class RecurrenceListener implements EventSubscriberInterface
@@ -12,11 +14,11 @@ class RecurrenceListener implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            Events::TASK_PROCESSED => 'onTaskProcessed',
+            Events::TASK_SUCCEEDED => 'onTaskSucceeded',
         ];
     }
 
-    public function onTaskProcessed(TaskProcessedEvent $event): void
+    public function onTaskSucceeded(TaskSucceededEvent $event, string $eventName, EventDispatcherInterface $eventDispatcher): void
     {
         $task = $event->getTask();
         $queue = $event->getQueue();
@@ -27,12 +29,15 @@ class RecurrenceListener implements EventSubscriberInterface
         }
 
         if ($newData = $event->getNewTaskData()) {
-            $queue->put($newData, [TtlOptions::DELAY => $data[JobOptions::RECURRENCE]]);
+            $newTask = $queue->put($newData, [TtlOptions::DELAY => $data[JobOptions::RECURRENCE]]);
             $queue->delete($task->getId());
         } else {
-            $queue->release($task->getId(), [TtlOptions::DELAY => $data[JobOptions::RECURRENCE]]);
+            $newTask = $queue->release($task->getId(), [TtlOptions::DELAY => $data[JobOptions::RECURRENCE]]);
         }
 
         $event->stopPropagation();
+
+        $taskProcessedEvent = new TaskProcessedEvent($newTask, $queue);
+        $eventDispatcher->dispatch(Events::TASK_PROCESSED, $taskProcessedEvent);
     }
 }

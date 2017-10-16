@@ -8,7 +8,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface as EventDispatche
 use Tarantool\JobQueue\Listener\Event\RunnerFailedEvent;
 use Tarantool\JobQueue\Listener\Event\RunnerIdleEvent;
 use Tarantool\JobQueue\Listener\Event\TaskFailedEvent;
-use Tarantool\JobQueue\Listener\Event\TaskProcessedEvent;
+use Tarantool\JobQueue\Listener\Event\TaskSucceededEvent;
 use Tarantool\JobQueue\Listener\Events;
 use Tarantool\JobQueue\Runner\Runner;
 use Tarantool\Queue\Queue;
@@ -49,9 +49,10 @@ class ParallelRunner implements Runner
                 try {
                     $workerTask = new GenericTask($queueTask, $this->queue, $this->executorsConfigFile);
                     yield $pool->enqueue($workerTask);
+                    //$workerTask->run(new \Amp\Parallel\Worker\BasicEnvironment());
 
-                    $event = new TaskProcessedEvent($queueTask, $this->queue);
-                    $this->eventDispatcher->dispatch(Events::TASK_PROCESSED, $event);
+                    $event = new TaskSucceededEvent($queueTask, $this->queue);
+                    $this->eventDispatcher->dispatch(Events::TASK_SUCCEEDED, $event);
                 } catch (\Throwable $error) {
                     $event = new TaskFailedEvent($error, $queueTask, $this->queue);
                     $this->eventDispatcher->dispatch(Events::TASK_FAILED, $event);

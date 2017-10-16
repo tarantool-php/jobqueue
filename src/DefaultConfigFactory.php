@@ -133,8 +133,8 @@ class DefaultConfigFactory
         $eventDispatcher = new EventDispatcher();
 
         $eventDispatcher->addSubscriber(new DefaultListener());
-        $eventDispatcher->addSubscriber(new RecurrenceListener());
         $eventDispatcher->addSubscriber(new RetryListener($this->createRetryStrategyFactory()));
+        $eventDispatcher->addSubscriber(new RecurrenceListener());
         $eventDispatcher->addSubscriber(new LoggingListener($this->createLogger()));
 
         return $eventDispatcher;

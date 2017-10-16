@@ -23,8 +23,8 @@ class LoggingListener implements EventSubscriberInterface
         return [
             Events::RUNNER_FAILED => 'onRunnerFailed',
             Events::RUNNER_IDLE => 'onRunnerIdle',
-            Events::TASK_FAILED => 'onTaskFailed',
-            Events::TASK_PROCESSED => 'onTaskProcessed',
+            Events::TASK_FAILED => ['onTaskFailed', -200],
+            Events::TASK_PROCESSED => ['onTaskProcessed', -200],
         ];
     }
 
@@ -43,7 +43,7 @@ class LoggingListener implements EventSubscriberInterface
         $error = $event->getError();
         $task = $event->getTask();
 
-        $this->logger->error(sprintf('Failed to execute task #%d: %s',
+        $this->logger->error(sprintf('Failed to process task #%d: %s',
             $task->getId(),
             $error->getMessage()),
             $task->getData()
@@ -54,7 +54,7 @@ class LoggingListener implements EventSubscriberInterface
     {
         $task = $event->getTask();
 
-        $this->logger->info(sprintf('Task #%d was successfully executed.',
+        $this->logger->info(sprintf('Task #%d was successfully processed.',
             $task->getId()),
             $task->getData()
         );
