@@ -18,7 +18,7 @@ class RetryListener implements EventSubscriberInterface
 
     private static $defaults = [
         JobOptions::RETRY_LIMIT => 2,
-        JobOptions::RETRY_ATTEMPT => 1,
+        JobOptions::RETRY_ATTEMPT => 0,
         JobOptions::RETRY_STRATEGY => RetryStrategyFactory::LINEAR,
     ];
 

@@ -26,8 +26,9 @@ class LimitedRetryStrategyTest extends TestCase
     public function provideDelayData(): array
     {
         return [
+            [2, 0, 10, 10],
             [2, 1, 10, 10],
-            [2, 2, 10, 10],
+            [2, 2, 10, null],
             [2, 3, 10, null],
         ];
     }
