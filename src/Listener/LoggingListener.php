@@ -7,7 +7,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tarantool\JobQueue\Listener\Event\RunnerFailedEvent;
 use Tarantool\JobQueue\Listener\Event\RunnerIdleEvent;
 use Tarantool\JobQueue\Listener\Event\TaskFailedEvent;
-use Tarantool\JobQueue\Listener\Event\TaskProcessedEvent;
+use Tarantool\JobQueue\Listener\Event\TaskSucceededEvent;
 
 class LoggingListener implements EventSubscriberInterface
 {
@@ -24,7 +24,7 @@ class LoggingListener implements EventSubscriberInterface
             Events::RUNNER_FAILED => 'onRunnerFailed',
             Events::RUNNER_IDLE => 'onRunnerIdle',
             Events::TASK_FAILED => ['onTaskFailed', -200],
-            Events::TASK_PROCESSED => ['onTaskProcessed', -200],
+            Events::TASK_SUCCEEDED => ['onTaskSucceeded', -200],
         ];
     }
 
@@ -50,7 +50,7 @@ class LoggingListener implements EventSubscriberInterface
         );
     }
 
-    public function onTaskProcessed(TaskProcessedEvent $event): void
+    public function onTaskSucceeded(TaskSucceededEvent $event): void
     {
         $task = $event->getTask();
 

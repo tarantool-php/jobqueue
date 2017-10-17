@@ -2,10 +2,8 @@
 
 namespace Tarantool\JobQueue\Listener;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tarantool\JobQueue\Listener\Event\TaskFailedEvent;
-use Tarantool\JobQueue\Listener\Event\TaskProcessedEvent;
 use Tarantool\JobQueue\Listener\Event\TaskSucceededEvent;
 use Tarantool\JobQueue\RetryStrategy\LimitedRetryStrategy;
 use Tarantool\JobQueue\RetryStrategy\RetryStrategyFactory;
@@ -35,9 +33,13 @@ class RetryListener implements EventSubscriberInterface
         ];
     }
 
-    public function onTaskFailed(TaskFailedEvent $event, string $eventName, EventDispatcherInterface $eventDispatcher): void
+    public function onTaskFailed(TaskFailedEvent $event): void
     {
         $task = $event->getTask();
+        if (!$task->isTaken()) {
+            return;
+        }
+
         $data = $task->getData() + self::$defaults;
         $attempt = $data[JobOptions::RETRY_ATTEMPT];
 
@@ -54,10 +56,7 @@ class RetryListener implements EventSubscriberInterface
         $newTask = $queue->put([JobOptions::RETRY_ATTEMPT => $attempt + 1] + $data, [TtlOptions::DELAY => $delay]);
         $queue->delete($task->getId());
 
-        $event->stopPropagation();
-
-        $taskProcessedEvent = new TaskProcessedEvent($newTask, $queue);
-        $eventDispatcher->dispatch(Events::TASK_PROCESSED, $taskProcessedEvent);
+        $event->setTask($newTask);
     }
 
     public function onTaskSucceeded(TaskSucceededEvent $event): void

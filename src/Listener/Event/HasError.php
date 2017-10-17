@@ -6,7 +6,7 @@ trait HasError
 {
     private $error;
 
-    private function setError(\Throwable $error)
+    private function setError(\Throwable $error): void
     {
         $this->error = $error;
     }

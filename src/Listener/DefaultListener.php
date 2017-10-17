@@ -2,10 +2,8 @@
 
 namespace Tarantool\JobQueue\Listener;
 
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tarantool\JobQueue\Listener\Event\TaskFailedEvent;
-use Tarantool\JobQueue\Listener\Event\TaskProcessedEvent;
 use Tarantool\JobQueue\Listener\Event\TaskSucceededEvent;
 
 class DefaultListener implements EventSubscriberInterface
@@ -18,29 +16,25 @@ class DefaultListener implements EventSubscriberInterface
         ];
     }
 
-    public function onTaskFailed(TaskFailedEvent $event, string $eventName, EventDispatcherInterface $eventDispatcher): void
+    public function onTaskFailed(TaskFailedEvent $event): void
     {
         $task = $event->getTask();
-        $queue = $event->getQueue();
 
-        $newTask = $queue->bury($task->getId());
-
-        $event->stopPropagation();
-
-        $taskProcessedEvent = new TaskProcessedEvent($newTask, $queue);
-        $eventDispatcher->dispatch(Events::TASK_PROCESSED, $taskProcessedEvent);
+        if ($task->isTaken()) {
+            $queue = $event->getQueue();
+            $newTask = $queue->bury($task->getId());
+            $event->setTask($newTask);
+        }
     }
 
-    public function onTaskSucceeded(TaskSucceededEvent $event, string $eventName, EventDispatcherInterface $eventDispatcher): void
+    public function onTaskSucceeded(TaskSucceededEvent $event): void
     {
         $task = $event->getTask();
-        $queue = $event->getQueue();
 
-        $newTask = $queue->ack($task->getId());
-
-        $event->stopPropagation();
-
-        $taskProcessedEvent = new TaskProcessedEvent($newTask, $queue);
-        $eventDispatcher->dispatch(Events::TASK_PROCESSED, $taskProcessedEvent);
+        if ($task->isTaken()) {
+            $queue = $event->getQueue();
+            $newTask = $queue->ack($task->getId());
+            $event->setTask($newTask);
+        }
     }
 }

@@ -8,7 +8,7 @@ trait HasQueue
 {
     private $queue;
 
-    private function setQueue(Queue $queue)
+    private function setQueue(Queue $queue): void
     {
         $this->queue = $queue;
     }

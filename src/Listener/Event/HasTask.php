@@ -8,7 +8,7 @@ trait HasTask
 {
     private $task;
 
-    private function setTask(Task $task)
+    public function setTask(Task $task): void
     {
         $this->task = $task;
     }
