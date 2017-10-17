@@ -20,9 +20,9 @@ class ExponentialRetryStrategyTest extends TestCase
     public function provideDelayData(): array
     {
         return [
-            [10, 1, 10],
-            [10, 2, 100],
-            [10, 3, 1000],
+            [10, 0, 10],
+            [10, 1, 100],
+            [10, 2, 1000],
         ];
     }
 }

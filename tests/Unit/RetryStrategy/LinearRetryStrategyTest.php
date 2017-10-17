@@ -20,9 +20,9 @@ class LinearRetryStrategyTest extends TestCase
     public function provideDelayData(): array
     {
         return [
-            [10, 1, 10],
-            [10, 2, 20],
-            [10, 3, 30],
+            [10, 0, 10],
+            [10, 1, 20],
+            [10, 2, 30],
         ];
     }
 }
