@@ -12,7 +12,7 @@ use Tarantool\Queue\TtlOptions;
 
 class RetryListener implements EventSubscriberInterface
 {
-    private $retryStrategyFactory;
+    private $factory;
 
     private static $defaults = [
         JobOptions::RETRY_LIMIT => 2,
@@ -20,9 +20,9 @@ class RetryListener implements EventSubscriberInterface
         JobOptions::RETRY_STRATEGY => RetryStrategyFactory::LINEAR,
     ];
 
-    public function __construct(RetryStrategyFactory $retryStrategyFactory)
+    public function __construct(RetryStrategyFactory $factory)
     {
-        $this->retryStrategyFactory = $retryStrategyFactory;
+        $this->factory = $factory;
     }
 
     public static function getSubscribedEvents(): array
@@ -43,7 +43,7 @@ class RetryListener implements EventSubscriberInterface
         $data = $task->getData() + self::$defaults;
         $attempt = $data[JobOptions::RETRY_ATTEMPT];
 
-        $strategy = $this->retryStrategyFactory->create($data[JobOptions::RETRY_STRATEGY]);
+        $strategy = $this->factory->create($data[JobOptions::RETRY_STRATEGY]);
         $strategy = new LimitedRetryStrategy($strategy, $data[JobOptions::RETRY_LIMIT]);
 
         if (null === $delay = $strategy->getDelay($attempt)) {
