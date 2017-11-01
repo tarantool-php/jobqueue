@@ -1,5 +1,15 @@
 # Tarantool JobQueue
 
+
+## Installation
+
+The recommended way to install the library is through [Composer](http://getcomposer.org):
+
+```sh
+$ composer require tarantool/jobqueue
+```
+
+
 ## Usage
 
 ```bash

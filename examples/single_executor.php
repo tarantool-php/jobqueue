@@ -8,6 +8,6 @@ return new class implements Executor
 {
     public function execute($payload, Queue $queue): void
     {
-        // do something with the payload
+        // put code logic here
     }
 };
