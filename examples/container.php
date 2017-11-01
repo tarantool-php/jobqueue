@@ -26,7 +26,7 @@ $container['logger'] = function ($c) {
     return new MonologLogger('worker', [new StreamHandler($c['logger.file'])]);
 };
 
-$container['autowiring.job_args'] = function ($c) {
+$container['autowired_job_args'] = function ($c) {
     return [
         'logger' => $c['logger'],
     ];
