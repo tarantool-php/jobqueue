@@ -1,0 +1,24 @@
+sudo: required
+
+language: php
+
+services:
+  - docker
+
+env:
+  - IMAGE='php:7.1-cli' PHPUNIT_OPTS='--coverage-clover=coverage.clover'
+#  - IMAGE='php:7.2-cli'
+
+install:
+  - ./dockerfile.sh | tee /dev/tty | docker build -t queue -
+
+script:
+  - docker network create tarantool-php
+  - docker run -d --net=tarantool-php --name=tarantool -v `pwd`:/jobqueue tarantool/tarantool:1.7 tarantool /jobqueue/tests/Integration/queues.lua
+  - docker run --rm --net=tarantool-php --name=jobqueue -v `pwd`:/jobqueue -w /jobqueue -e PHPUNIT_OPTS="$PHPUNIT_OPTS" jobqueue
+
+after_script:
+  - if [[ -f coverage.clover ]]; then
+      curl -sSOL https://scrutinizer-ci.com/ocular.phar &&
+      php ocular.phar code-coverage:upload --format=php-clover coverage.clover;
+    fi
