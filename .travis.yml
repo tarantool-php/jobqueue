@@ -10,7 +10,7 @@ env:
 #  - IMAGE='php:7.2-cli'
 
 install:
-  - ./dockerfile.sh | tee /dev/tty | docker build -t queue -
+  - ./dockerfile.sh | tee /dev/tty | docker build -t jobqueue -
 
 script:
   - docker network create tarantool-php

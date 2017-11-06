@@ -1,5 +1,8 @@
 # Tarantool JobQueue
 
+[![Build Status](https://travis-ci.org/tarantool-php/jobqueue.svg?branch=master)](https://travis-ci.org/tarantool-php/jobqueue)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/tarantool-php/jobqueue/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/tarantool-php/jobqueue/?branch=master)
+
 
 ## Installation
 
