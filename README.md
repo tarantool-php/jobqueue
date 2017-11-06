@@ -20,6 +20,9 @@ composer require tarantool/jobqueue
 ./jobqueue help run
 ```
 
+> Please check the [JobServer](https://github.com/tarantool-php/jobserver) application source code for a more 
+complete usage example of this library.
+
 
 ### Running a worker
 
