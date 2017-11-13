@@ -2,14 +2,13 @@
 
 namespace Tarantool\JobQueue\Console\Command;
 
-use Monolog\Logger;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class RunCommand extends Command
 {
-    const DEFAULT_IDLE_TIMEOUT = 1;
+    private const DEFAULT_IDLE_TIMEOUT = 1;
 
     protected function configure(): void
     {
@@ -18,10 +17,10 @@ class RunCommand extends Command
         $this
             ->setName('run')
             ->setDescription('Runs a job worker')
-            ->addOption('executors-config', 'e', InputOption::VALUE_REQUIRED, '')
+            ->addOption('executors-config', 'e', InputOption::VALUE_REQUIRED)
             ->addOption('idle-timeout', 'i', InputOption::VALUE_REQUIRED, '', self::DEFAULT_IDLE_TIMEOUT)
-            ->addOption('log-file', 'f', InputOption::VALUE_REQUIRED, '')
-            ->addOption('log-level', 'l', InputOption::VALUE_REQUIRED, '', Logger::INFO)
+            ->addOption('log-file', 'f', InputOption::VALUE_REQUIRED)
+            ->addOption('log-level', 'l', InputOption::VALUE_REQUIRED)
         ;
     }
 
