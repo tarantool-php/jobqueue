@@ -28,7 +28,7 @@ class DefaultConfigFactory
     private $username;
     private $password;
     private $logFile;
-    private $logLevel;
+    private $logLevel = MonologLogger::DEBUG;
     private $executorsConfigFile;
 
     public function setQueueName(string $name): self
