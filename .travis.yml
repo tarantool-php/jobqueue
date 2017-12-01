@@ -6,8 +6,8 @@ services:
   - docker
 
 env:
-  - IMAGE='php:7.1-cli'
-  - IMAGE='php:7.2-cli' PHPUNIT_OPTS='--coverage-clover=coverage.clover'
+  - IMAGE='php:7.1-cli' PHPUNIT_OPTS='--coverage-clover=coverage.clover'
+  - IMAGE='php:7.2-cli'
 
 install:
   - ./dockerfile.sh | tee /dev/tty | docker build -t jobqueue -
