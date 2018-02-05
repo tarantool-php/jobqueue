@@ -5,9 +5,9 @@ namespace Tarantool\JobQueue\Handler;
 use Tarantool\JobQueue\Handler\RetryStrategy\LimitedRetryStrategy;
 use Tarantool\JobQueue\Handler\RetryStrategy\RetryStrategyFactory;
 use Tarantool\JobQueue\JobOptions;
+use Tarantool\Queue\Options;
 use Tarantool\Queue\Queue;
 use Tarantool\Queue\Task;
-use Tarantool\Queue\TtlOptions;
 
 class RetryHandler implements Handler
 {
@@ -41,7 +41,7 @@ class RetryHandler implements Handler
         }
 
         // TODO replace these 2 calls with an atomic one
-        $queue->put([JobOptions::RETRY_ATTEMPT => $attempt + 1] + $data, [TtlOptions::DELAY => $delay]);
+        $queue->put([JobOptions::RETRY_ATTEMPT => $attempt + 1] + $data, [Options::DELAY => $delay]);
         $queue->delete($task->getId());
     }
 }

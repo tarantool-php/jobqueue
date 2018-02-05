@@ -3,9 +3,9 @@
 namespace Tarantool\JobQueue\Handler;
 
 use Tarantool\JobQueue\JobOptions;
+use Tarantool\Queue\Options;
 use Tarantool\Queue\Queue;
 use Tarantool\Queue\Task;
-use Tarantool\Queue\TtlOptions;
 
 class RecurrenceHandler implements Handler
 {
@@ -26,6 +26,6 @@ class RecurrenceHandler implements Handler
             return;
         }
 
-        $queue->release($task->getId(), [TtlOptions::DELAY => $data[JobOptions::RECURRENCE]]);
+        $queue->release($task->getId(), [Options::DELAY => $data[JobOptions::RECURRENCE]]);
     }
 }
