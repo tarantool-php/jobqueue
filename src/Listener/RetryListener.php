@@ -8,7 +8,7 @@ use Tarantool\JobQueue\Listener\Event\TaskSucceededEvent;
 use Tarantool\JobQueue\RetryStrategy\LimitedRetryStrategy;
 use Tarantool\JobQueue\RetryStrategy\RetryStrategyFactory;
 use Tarantool\JobQueue\JobOptions;
-use Tarantool\Queue\TtlOptions;
+use Tarantool\Queue\Options;
 
 class RetryListener implements EventSubscriberInterface
 {
@@ -53,7 +53,7 @@ class RetryListener implements EventSubscriberInterface
         $queue = $event->getQueue();
 
         // TODO replace these 2 calls with an atomic one
-        $newTask = $queue->put([JobOptions::RETRY_ATTEMPT => $attempt + 1] + $data, [TtlOptions::DELAY => $delay]);
+        $newTask = $queue->put([JobOptions::RETRY_ATTEMPT => $attempt + 1] + $data, [Options::DELAY => $delay]);
         $queue->delete($task->getId());
 
         $event->setTask($newTask);

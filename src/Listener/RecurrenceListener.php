@@ -5,7 +5,7 @@ namespace Tarantool\JobQueue\Listener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Tarantool\JobQueue\JobOptions;
 use Tarantool\JobQueue\Listener\Event\TaskSucceededEvent;
-use Tarantool\Queue\TtlOptions;
+use Tarantool\Queue\Options;
 
 class RecurrenceListener implements EventSubscriberInterface
 {
@@ -31,10 +31,10 @@ class RecurrenceListener implements EventSubscriberInterface
         $queue = $event->getQueue();
 
         if ($newData = $event->getNewTaskData()) {
-            $newTask = $queue->put($newData, [TtlOptions::DELAY => $data[JobOptions::RECURRENCE]]);
+            $newTask = $queue->put($newData, [Options::DELAY => $data[JobOptions::RECURRENCE]]);
             $queue->delete($task->getId());
         } else {
-            $newTask = $queue->release($task->getId(), [TtlOptions::DELAY => $data[JobOptions::RECURRENCE]]);
+            $newTask = $queue->release($task->getId(), [Options::DELAY => $data[JobOptions::RECURRENCE]]);
         }
 
         $event->setTask($newTask);
