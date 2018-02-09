@@ -62,6 +62,11 @@ class RetryListener implements EventSubscriberInterface
     public function onTaskSucceeded(TaskSucceededEvent $event): void
     {
         $data = $event->getTaskData();
+
+        if (empty($data[JobOptions::RETRY_ATTEMPT])) {
+            return;
+        }
+
         unset($data[JobOptions::RETRY_ATTEMPT]);
         $event->setNewTaskData($data);
     }
