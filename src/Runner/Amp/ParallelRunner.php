@@ -49,7 +49,6 @@ class ParallelRunner implements Runner
                 try {
                     $workerTask = new GenericTask($queueTask, $this->queue, $this->executorsConfigFile);
                     yield $pool->enqueue($workerTask);
-                    //$workerTask->run(new \Amp\Parallel\Worker\BasicEnvironment());
 
                     $event = new TaskSucceededEvent($queueTask, $this->queue);
                     $this->eventDispatcher->dispatch(Events::TASK_SUCCEEDED, $event);
