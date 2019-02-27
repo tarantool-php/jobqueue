@@ -4,11 +4,11 @@ namespace Tarantool\JobQueue;
 
 abstract class JobOptions
 {
-    const PAYLOAD = 'payload';
-    const PAYLOAD_SERVICE = 'service';
-    const PAYLOAD_ARGS = 'args';
-    const RETRY_LIMIT = 'retry_limit';
-    const RETRY_ATTEMPT = 'retry_attempt';
-    const RETRY_STRATEGY = 'retry_strategy';
-    const RECURRENCE = 'recurrence';
+    public const PAYLOAD = 'payload';
+    public const PAYLOAD_SERVICE = 'service';
+    public const PAYLOAD_ARGS = 'args';
+    public const RETRY_LIMIT = 'retry_limit';
+    public const RETRY_ATTEMPT = 'retry_attempt';
+    public const RETRY_STRATEGY = 'retry_strategy';
+    public const RECURRENCE = 'recurrence';
 }

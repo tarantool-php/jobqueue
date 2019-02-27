@@ -12,10 +12,10 @@ use Tarantool\JobQueue\DefaultConfigFactory;
 
 class Command extends BaseCommand
 {
-    const DEFAULT_HOST = '127.0.0.1';
-    const DEFAULT_PORT = 3301;
-    const ENV_USER = 'TNT_JOBQUEUE_USER';
-    const ENV_PASSWORD = 'TNT_JOBQUEUE_PASSWORD';
+    private const DEFAULT_HOST = '127.0.0.1';
+    private const DEFAULT_PORT = 3301;
+    private const ENV_USER = 'TNT_JOBQUEUE_USER';
+    private const ENV_PASSWORD = 'TNT_JOBQUEUE_PASSWORD';
 
     protected function configure(): void
     {
@@ -28,7 +28,7 @@ class Command extends BaseCommand
         ;
     }
 
-    protected function createConfigFactory(InputInterface $input, OutputInterface $output): DefaultConfigFactory
+    final protected function createConfigFactory(InputInterface $input, OutputInterface $output): DefaultConfigFactory
     {
         $customConfigPath = $input->getOption('config');
         if (null !== $customConfigPath && !is_readable($customConfigPath)) {

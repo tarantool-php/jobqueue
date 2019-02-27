@@ -11,7 +11,7 @@ use Tarantool\JobQueue\Console\Command\TruncateCommand;
 
 class Application extends BaseApplication
 {
-    const VERSION = '0.x-DEV';
+    private const VERSION = '0.x-DEV';
 
     public function __construct()
     {
