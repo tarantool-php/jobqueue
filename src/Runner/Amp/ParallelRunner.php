@@ -35,7 +35,6 @@ class ParallelRunner implements Runner
 
         Loop::run(function() use ($idleTimeout) {
             $pool = new DefaultPool();
-            $pool->start();
 
             Loop::repeat(100, function () use ($pool, $idleTimeout) {
                 if (!$queueTask = $this->queue->take($idleTimeout)) {
