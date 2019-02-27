@@ -13,7 +13,7 @@ use Tarantool\Queue\Task as QueueTask;
 
 class GenericTask implements Task
 {
-    const EXECUTOR_KEY = self::class.'-executor';
+    private const EXECUTOR_KEY = self::class.'-executor';
 
     private $task;
     private $queue;
