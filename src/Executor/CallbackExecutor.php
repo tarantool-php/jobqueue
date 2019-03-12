@@ -21,7 +21,7 @@ class CallbackExecutor implements Executor
     public function execute($payload, Queue $queue): void
     {
         $callback = $this->callbackResolver->resolve($payload);
-        $args = $payload[JobOptions::PAYLOAD_ARGS] ?? [];
+        $args = $payload[JobOptions::PAYLOAD_SERVICE_ARGS] ?? [];
 
         $args = array_merge($args, [
             $payload,

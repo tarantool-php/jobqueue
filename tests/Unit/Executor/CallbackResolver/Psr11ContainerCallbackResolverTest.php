@@ -15,7 +15,7 @@ class Psr11ContainerCallbackResolverTest extends TestCase
     public function testResolve(string $serviceName, string $id, string $idFormat = null): void
     {
         $callback = function ($payload) {};
-        $payload = [JobOptions::PAYLOAD_SERVICE => $serviceName];
+        $payload = [JobOptions::PAYLOAD_SERVICE_ID => $serviceName];
 
         $container = $this->createMock(ContainerInterface::class);
         $container->expects($this->atLeastOnce())->method('get')
