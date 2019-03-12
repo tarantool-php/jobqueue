@@ -5,7 +5,7 @@ namespace Tarantool\JobQueue\Tests\Unit\Executor\CallbackResolver;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Tarantool\JobQueue\Executor\CallbackResolver\Psr11ContainerCallbackResolver;
-use Tarantool\JobQueue\JobOptions;
+use Tarantool\JobQueue\JobBuilder\JobOptions;
 
 class Psr11ContainerCallbackResolverTest extends TestCase
 {
