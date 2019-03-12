@@ -4,7 +4,8 @@ namespace Tarantool\JobQueue\Handler;
 
 use Tarantool\JobQueue\Handler\RetryStrategy\LimitedRetryStrategy;
 use Tarantool\JobQueue\Handler\RetryStrategy\RetryStrategyFactory;
-use Tarantool\JobQueue\JobOptions;
+use Tarantool\JobQueue\JobBuilder\JobOptions;
+use Tarantool\JobQueue\JobBuilder\RetryStrategies;
 use Tarantool\Queue\Options;
 use Tarantool\Queue\Queue;
 use Tarantool\Queue\Task;
@@ -17,7 +18,7 @@ class RetryHandler implements Handler
     private static $defaults = [
         JobOptions::RETRY_LIMIT => 2,
         JobOptions::RETRY_ATTEMPT => 1,
-        JobOptions::RETRY_STRATEGY => RetryStrategyFactory::LINEAR,
+        JobOptions::RETRY_STRATEGY => RetryStrategies::LINEAR,
     ];
 
     public function __construct(Handler $handler, RetryStrategyFactory $retryStrategyFactory)

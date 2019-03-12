@@ -20,6 +20,7 @@
         "symfony/console": "^4",
         "symfony/process": "^4",
         "tarantool/client": "^0.4.1",
+        "tarantool/jobbuilder": "@dev",
         "tarantool/queue": "^0.7"
     },
     "require-dev": {

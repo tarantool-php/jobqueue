@@ -2,7 +2,7 @@
 
 namespace Tarantool\JobQueue\Handler;
 
-use Tarantool\JobQueue\JobOptions;
+use Tarantool\JobQueue\JobBuilder\JobOptions;
 use Tarantool\Queue\Options;
 use Tarantool\Queue\Queue;
 use Tarantool\Queue\Task;

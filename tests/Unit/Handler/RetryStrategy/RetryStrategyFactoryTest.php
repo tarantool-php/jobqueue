@@ -7,6 +7,7 @@ use Tarantool\JobQueue\Handler\RetryStrategy\ConstantRetryStrategy;
 use Tarantool\JobQueue\Handler\RetryStrategy\ExponentialRetryStrategy;
 use Tarantool\JobQueue\Handler\RetryStrategy\LinearRetryStrategy;
 use Tarantool\JobQueue\Handler\RetryStrategy\RetryStrategyFactory;
+use Tarantool\JobQueue\JobBuilder\RetryStrategies;
 
 class RetryStrategyFactoryTest extends TestCase
 {
@@ -27,9 +28,9 @@ class RetryStrategyFactoryTest extends TestCase
     public function provideCreateData(): array
     {
         return [
-            [ConstantRetryStrategy::class, RetryStrategyFactory::CONSTANT],
-            [ExponentialRetryStrategy::class, RetryStrategyFactory::EXPONENTIAL],
-            [LinearRetryStrategy::class, RetryStrategyFactory::LINEAR],
+            [ConstantRetryStrategy::class, RetryStrategies::CONSTANT],
+            [ExponentialRetryStrategy::class, RetryStrategies::EXPONENTIAL],
+            [LinearRetryStrategy::class, RetryStrategies::LINEAR],
         ];
     }
 }
