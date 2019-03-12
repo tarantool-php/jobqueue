@@ -19,12 +19,14 @@ class Psr11ContainerCallbackResolver implements CallbackResolver
 
     public function resolve($payload): callable
     {
-        if (empty($payload[JobOptions::PAYLOAD_SERVICE])) {
-            throw BadPayloadException::missingOrEmptyKeyValue($payload, JobOptions::PAYLOAD_SERVICE, 'string', __CLASS__);
+        if (empty($payload[JobOptions::PAYLOAD_SERVICE_ID])) {
+            throw BadPayloadException::missingOrEmptyKeyValue($payload, JobOptions::PAYLOAD_SERVICE_ID, 'string', __CLASS__);
         }
 
-        $id = sprintf($this->idFormat, $payload[JobOptions::PAYLOAD_SERVICE]);
+        $id = sprintf($this->idFormat, $payload[JobOptions::PAYLOAD_SERVICE_ID]);
 
-        return $this->container->get($id);
+        return empty($payload[JobOptions::PAYLOAD_SERVICE_METHOD])
+            ? $this->container->get($id)
+            : [$this->container->get($id), $payload[JobOptions::PAYLOAD_SERVICE_METHOD]];
     }
 }
