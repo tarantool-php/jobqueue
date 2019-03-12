@@ -4,7 +4,7 @@ namespace Tarantool\JobQueue\Executor;
 
 use ArgumentsResolver\InDepthArgumentsResolver;
 use Tarantool\JobQueue\Executor\CallbackResolver\CallbackResolver;
-use Tarantool\JobQueue\JobOptions;
+use Tarantool\JobQueue\JobBuilder\JobOptions;
 use Tarantool\Queue\Queue;
 
 class CallbackExecutor implements Executor

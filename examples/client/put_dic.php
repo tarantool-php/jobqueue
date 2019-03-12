@@ -1,6 +1,6 @@
 <?php
 
-use Tarantool\JobQueue\JobOptions;
+use Tarantool\JobQueue\JobBuilder\JobOptions;
 
 require __DIR__.'/../../vendor/autoload.php';
 

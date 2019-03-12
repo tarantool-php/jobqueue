@@ -3,11 +3,12 @@
 namespace Tarantool\JobQueue\Listener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Tarantool\JobQueue\JobBuilder\JobOptions;
+use Tarantool\JobQueue\JobBuilder\RetryStrategies;
 use Tarantool\JobQueue\Listener\Event\TaskFailedEvent;
 use Tarantool\JobQueue\Listener\Event\TaskSucceededEvent;
 use Tarantool\JobQueue\RetryStrategy\LimitedRetryStrategy;
 use Tarantool\JobQueue\RetryStrategy\RetryStrategyFactory;
-use Tarantool\JobQueue\JobOptions;
 use Tarantool\Queue\Options;
 
 class RetryListener implements EventSubscriberInterface
@@ -17,7 +18,7 @@ class RetryListener implements EventSubscriberInterface
     private static $defaults = [
         JobOptions::RETRY_LIMIT => 2,
         JobOptions::RETRY_ATTEMPT => 0,
-        JobOptions::RETRY_STRATEGY => RetryStrategyFactory::LINEAR,
+        JobOptions::RETRY_STRATEGY => RetryStrategies::LINEAR,
     ];
 
     public function __construct(RetryStrategyFactory $factory)

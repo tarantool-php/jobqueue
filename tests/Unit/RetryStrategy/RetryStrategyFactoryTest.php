@@ -3,6 +3,7 @@
 namespace Tarantool\JobQueue\Tests\Unit\RetryStrategy;
 
 use PHPUnit\Framework\TestCase;
+use Tarantool\JobQueue\JobBuilder\RetryStrategies;
 use Tarantool\JobQueue\RetryStrategy\ConstantRetryStrategy;
 use Tarantool\JobQueue\RetryStrategy\ExponentialRetryStrategy;
 use Tarantool\JobQueue\RetryStrategy\LinearRetryStrategy;
@@ -27,9 +28,9 @@ class RetryStrategyFactoryTest extends TestCase
     public function provideCreateData(): array
     {
         return [
-            [ConstantRetryStrategy::class, RetryStrategyFactory::CONSTANT],
-            [ExponentialRetryStrategy::class, RetryStrategyFactory::EXPONENTIAL],
-            [LinearRetryStrategy::class, RetryStrategyFactory::LINEAR],
+            [ConstantRetryStrategy::class, RetryStrategies::CONSTANT],
+            [ExponentialRetryStrategy::class, RetryStrategies::EXPONENTIAL],
+            [LinearRetryStrategy::class, RetryStrategies::LINEAR],
         ];
     }
 }

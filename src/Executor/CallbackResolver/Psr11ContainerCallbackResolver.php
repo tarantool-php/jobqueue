@@ -4,7 +4,7 @@ namespace Tarantool\JobQueue\Executor\CallbackResolver;
 
 use Psr\Container\ContainerInterface as Container;
 use Tarantool\JobQueue\Exception\BadPayloadException;
-use Tarantool\JobQueue\JobOptions;
+use Tarantool\JobQueue\JobBuilder\JobOptions;
 
 class Psr11ContainerCallbackResolver implements CallbackResolver
 {

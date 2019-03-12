@@ -7,7 +7,7 @@ use Amp\Parallel\Worker\Task;
 use Tarantool\JobQueue\Executor\Executor;
 use Tarantool\JobQueue\Executor\ExecutorChain;
 use Tarantool\JobQueue\Executor\ProcessExecutor;
-use Tarantool\JobQueue\JobOptions;
+use Tarantool\JobQueue\JobBuilder\JobOptions;
 use Tarantool\Queue\Queue;
 use Tarantool\Queue\Task as QueueTask;
 

@@ -3,7 +3,7 @@
 namespace Tarantool\JobQueue\Listener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Tarantool\JobQueue\JobOptions;
+use Tarantool\JobQueue\JobBuilder\JobOptions;
 use Tarantool\JobQueue\Listener\Event\TaskSucceededEvent;
 use Tarantool\Queue\Options;
 
