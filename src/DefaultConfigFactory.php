@@ -45,6 +45,11 @@ class DefaultConfigFactory
         return $this;
     }
 
+    public function getConnectionUri(): ?string
+    {
+        return $this->connectionUri;
+    }
+
     public function setConnectionOptions(array $options): self
     {
         $this->connectionOptions = $options;

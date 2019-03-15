@@ -38,11 +38,12 @@ class Command extends BaseCommand
 
         $configFactory = $customConfigPath ? include $customConfigPath : new DefaultConfigFactory();
 
-        $uri = (null === $socket = $input->getOption('socket'))
-            ? sprintf('tcp://%s:%s', $input->getOption('host'), $input->getOption('port'))
-            : "unix://$socket";
-
-        $configFactory->setConnectionUri($uri);
+        if (null !== $socket = $input->getOption('socket')) {
+            $configFactory->setConnectionUri("unix://$socket");
+        } elseif ((false !== $input->getParameterOption('--host')) || !$configFactory->getConnectionUri()) {
+            $uri = sprintf('tcp://%s:%s', $input->getOption('host'), $input->getOption('port'));
+            $configFactory->setConnectionUri($uri);
+        }
 
         $queueName = $input->getArgument('queue');
         $configFactory->setQueueName($queueName);
