@@ -23,6 +23,7 @@ class Command extends BaseCommand
             ->addArgument('queue', InputArgument::REQUIRED)
             ->addOption('host', 'H', InputOption::VALUE_REQUIRED, '', self::DEFAULT_HOST)
             ->addOption('port', 'p', InputOption::VALUE_REQUIRED, '', self::DEFAULT_PORT)
+            ->addOption('socket', 's', InputOption::VALUE_REQUIRED)
             ->addOption('user', 'u', InputOption::VALUE_REQUIRED)
             ->addOption('config', 'c', InputOption::VALUE_REQUIRED)
         ;
@@ -37,7 +38,10 @@ class Command extends BaseCommand
 
         $configFactory = $customConfigPath ? include $customConfigPath : new DefaultConfigFactory();
 
-        $uri = sprintf('tcp://%s:%s', $input->getOption('host'), $input->getOption('port'));
+        $uri = (null === $socket = $input->getOption('socket'))
+            ? sprintf('tcp://%s:%s', $input->getOption('host'), $input->getOption('port'))
+            : "unix://$socket";
+
         $configFactory->setConnectionUri($uri);
 
         $queueName = $input->getArgument('queue');
