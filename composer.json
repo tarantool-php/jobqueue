@@ -21,7 +21,7 @@
         "symfony/event-dispatcher": "^4",
         "symfony/process": "^4",
         "tarantool/client": "^0.4.1",
-        "tarantool/jobbuilder": "@dev",
+        "tarantool/jobbuilder": "^0.2.0",
         "tarantool/queue": "^0.7"
     },
     "require-dev": {
