@@ -9,9 +9,6 @@ use Psr\Log\NullLogger;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Tarantool\Client\Client;
-use Tarantool\Client\Connection\Retryable;
-use Tarantool\Client\Connection\StreamConnection;
-use Tarantool\Client\Packer\PurePacker;
 use Tarantool\JobQueue\RetryStrategy\RetryStrategyFactory;
 use Tarantool\JobQueue\Listener\DefaultListener;
 use Tarantool\JobQueue\Listener\LoggingListener;
@@ -24,10 +21,7 @@ use Tarantool\Queue\Queue;
 class DefaultConfigFactory
 {
     private $queueName;
-    private $connectionUri;
-    private $connectionOptions;
-    private $username;
-    private $password;
+    private $clientOptions = [];
     private $logFile;
     private $logLevel = MonologLogger::DEBUG;
     private $executorsConfigFile;
@@ -41,27 +35,20 @@ class DefaultConfigFactory
 
     public function setConnectionUri(string $uri): self
     {
-        $this->connectionUri = $uri;
+        $this->clientOptions['uri'] = $uri;
 
         return $this;
     }
 
     public function getConnectionUri(): ?string
     {
-        return $this->connectionUri;
-    }
-
-    public function setConnectionOptions(array $options): self
-    {
-        $this->connectionOptions = $options;
-
-        return $this;
+        return $this->clientOptions['uri'] ?? null;
     }
 
     public function setCredentials(string $username, string $password): self
     {
-        $this->username = $username;
-        $this->password = $password;
+        $this->clientOptions['username'] = $username;
+        $this->clientOptions['password'] = $password;
 
         return $this;
     }
@@ -105,20 +92,7 @@ class DefaultConfigFactory
 
     public function createClient(): Client
     {
-        if (!$this->connectionUri) {
-            throw new \LogicException('Connection URI is not defined.');
-        }
-
-        $conn = new StreamConnection($this->connectionUri, $this->connectionOptions);
-        $conn = new Retryable($conn);
-        $client = new Client($conn, new PurePacker());
-
-        if ($this->username) {
-            // TODO make it lazy
-            $client->authenticate($this->username, $this->password);
-        }
-
-        return $client;
+        return Client::fromOptions($this->clientOptions);
     }
 
     public function createLogger(): Logger
