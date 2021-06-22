@@ -7,7 +7,7 @@ use Tarantool\JobQueue\Executor\CallbackExecutor;
 use Tarantool\JobQueue\Executor\CallbackResolver\CallbackResolver;
 use Tarantool\Queue\Queue;
 
-class CallbackExecutorTest extends TestCase
+final class CallbackExecutorTest extends TestCase
 {
     private $callbackResolver;
     private $queue;

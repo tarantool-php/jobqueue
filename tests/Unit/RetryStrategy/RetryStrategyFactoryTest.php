@@ -9,7 +9,7 @@ use Tarantool\JobQueue\RetryStrategy\ExponentialRetryStrategy;
 use Tarantool\JobQueue\RetryStrategy\LinearRetryStrategy;
 use Tarantool\JobQueue\RetryStrategy\RetryStrategyFactory;
 
-class RetryStrategyFactoryTest extends TestCase
+final class RetryStrategyFactoryTest extends TestCase
 {
     /**
      * @dataProvider provideCreateData

@@ -5,7 +5,7 @@ namespace Tarantool\JobQueue\Tests\Unit\RetryStrategy;
 use PHPUnit\Framework\TestCase;
 use Tarantool\JobQueue\RetryStrategy\ConstantRetryStrategy;
 
-class ConstantRetryStrategyTest extends TestCase
+final class ConstantRetryStrategyTest extends TestCase
 {
     /**
      * @dataProvider provideDelayData

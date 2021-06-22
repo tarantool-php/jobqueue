@@ -5,7 +5,7 @@ namespace Tarantool\JobQueue\Tests\Unit\Executor\CallbackResolver;
 use PHPUnit\Framework\TestCase;
 use Tarantool\JobQueue\Executor\CallbackResolver\DirectCallbackResolver;
 
-class DirectCallbackResolverTest extends TestCase
+final class DirectCallbackResolverTest extends TestCase
 {
     public function testResolve(): void
     {

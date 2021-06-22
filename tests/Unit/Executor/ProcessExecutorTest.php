@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Tarantool\JobQueue\Executor\ProcessExecutor;
 use Tarantool\Queue\Queue;
 
-class ProcessExecutorTest extends TestCase
+final class ProcessExecutorTest extends TestCase
 {
     public function testExecute(): void
     {
@@ -14,11 +14,11 @@ class ProcessExecutorTest extends TestCase
         $queue = $this->createMock(Queue::class);
 
         $filename = sprintf('%s/%s.test', sys_get_temp_dir(), uniqid(str_replace('\\', '_', __CLASS__), true));
-        $this->assertFileNotExists($filename);
+        self::assertFileDoesNotExist($filename);
 
         $executor->execute("php -r 'touch(\"$filename\");'", $queue);
 
-        $this->assertFileExists($filename);
+        self::assertFileExists($filename);
         @unlink($filename);
     }
 }

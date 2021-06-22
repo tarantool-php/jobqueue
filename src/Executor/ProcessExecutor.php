@@ -20,10 +20,14 @@ class ProcessExecutor implements Executor
             return $payload;
         }
 
-        if (is_string($payload)) {
+        if (is_array($payload)) {
             return new Process($payload);
         }
 
-        throw BadPayloadException::unexpectedType($payload, 'string or '.Process::class, __CLASS__);
+        if (is_string($payload)) {
+            return Process::fromShellCommandline($payload);
+        }
+
+        throw BadPayloadException::unexpectedType($payload, 'array, string or '.Process::class, __CLASS__);
     }
 }

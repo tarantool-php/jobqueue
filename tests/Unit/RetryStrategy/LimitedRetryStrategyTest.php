@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Tarantool\JobQueue\RetryStrategy\LimitedRetryStrategy;
 use Tarantool\JobQueue\RetryStrategy\RetryStrategy;
 
-class LimitedRetryStrategyTest extends TestCase
+final class LimitedRetryStrategyTest extends TestCase
 {
     /**
      * @dataProvider provideDelayData
@@ -14,7 +14,7 @@ class LimitedRetryStrategyTest extends TestCase
     public function testGetDelay(int $retryLimit, int $attempt, int $mockDelay, ?int $resultDelay): void
     {
         $mock = $this->createMock(RetryStrategy::class);
-        $mock->expects($this->any())->method('getDelay')
+        $mock->method('getDelay')
             ->with($attempt)
             ->willReturn($mockDelay);
 
