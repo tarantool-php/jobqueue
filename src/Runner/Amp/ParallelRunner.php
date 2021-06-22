@@ -30,7 +30,7 @@ class ParallelRunner implements Runner
     {
         Loop::setErrorHandler(function (\Throwable $error) {
             $event = new RunnerFailedEvent($error, $this->queue);
-            $this->eventDispatcher->dispatch(Events::RUNNER_FAILED, $event);
+            $this->eventDispatcher->dispatch($event, Events::RUNNER_FAILED);
             throw $error;
         });
 
@@ -40,7 +40,7 @@ class ParallelRunner implements Runner
             Loop::repeat(100, function () use ($pool, $idleTimeout) {
                 if (!$queueTask = $this->queue->take($idleTimeout)) {
                     $event = new RunnerIdleEvent($this->queue);
-                    $this->eventDispatcher->dispatch(Events::RUNNER_IDLE, $event);
+                    $this->eventDispatcher->dispatch($event, Events::RUNNER_IDLE);
 
                     return;
                 }
@@ -50,10 +50,10 @@ class ParallelRunner implements Runner
                     yield $pool->enqueue($workerTask);
 
                     $event = new TaskSucceededEvent($queueTask, $this->queue);
-                    $this->eventDispatcher->dispatch(Events::TASK_SUCCEEDED, $event);
+                    $this->eventDispatcher->dispatch($event, Events::TASK_SUCCEEDED);
                 } catch (\Throwable $error) {
                     $event = new TaskFailedEvent($error, $queueTask, $this->queue);
-                    $this->eventDispatcher->dispatch(Events::TASK_FAILED, $event);
+                    $this->eventDispatcher->dispatch($event, Events::TASK_FAILED);
                 }
             });
         });

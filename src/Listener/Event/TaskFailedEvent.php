@@ -2,7 +2,7 @@
 
 namespace Tarantool\JobQueue\Listener\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 use Tarantool\Queue\Queue;
 use Tarantool\Queue\Task;
 

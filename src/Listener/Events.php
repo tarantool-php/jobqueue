@@ -2,10 +2,14 @@
 
 namespace Tarantool\JobQueue\Listener;
 
-abstract class Events
+final class Events
 {
-    const RUNNER_FAILED = 'runner_failed';
-    const RUNNER_IDLE = 'runner_idle';
-    const TASK_FAILED = 'task_failed';
-    const TASK_SUCCEEDED = 'task_succeeded';
+    public const RUNNER_FAILED = 'runner_failed';
+    public const RUNNER_IDLE = 'runner_idle';
+    public const TASK_FAILED = 'task_failed';
+    public const TASK_SUCCEEDED = 'task_succeeded';
+
+    private function __construct()
+    {
+    }
 }
