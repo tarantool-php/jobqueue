@@ -17,11 +17,13 @@ class TruncateCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $queue = $this->createConfigFactory($input, $output)->createQueue();
         $queue->truncate();
 
         $output->writeln(sprintf('<info>%s</info> was successfully truncated.', $queue->getName()));
+
+        return 0;
     }
 }

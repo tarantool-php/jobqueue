@@ -19,7 +19,7 @@ class PutCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $json = $input->getArgument('json-data');
         $data = json_decode($json, true);
@@ -37,5 +37,7 @@ class PutCommand extends Command
             $queue->getName(),
             $task->getId()
         ));
+
+        return 0;
     }
 }

@@ -17,7 +17,7 @@ class StatsCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $queue = $this->createConfigFactory($input, $output)->createQueue();
         $stats = $queue->stats();
@@ -25,6 +25,8 @@ class StatsCommand extends Command
         $output->writeln(sprintf('Queue: <options=bold>%s</>', $queue->getName()));
         $output->writeln('Tasks: '.self::buildLine($stats['tasks']));
         $output->writeln('Calls: '.self::buildLine($stats['calls']));
+
+        return 0;
     }
 
     private static function buildLine(array $stats): string

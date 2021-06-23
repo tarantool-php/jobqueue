@@ -19,7 +19,7 @@ class KickCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $queue = $this->createConfigFactory($input, $output)->createQueue();
         $count = $input->getArgument('count');
@@ -31,5 +31,7 @@ class KickCommand extends Command
             $affected,
             $queue->getName()
         ));
+
+        return 0;
     }
 }
